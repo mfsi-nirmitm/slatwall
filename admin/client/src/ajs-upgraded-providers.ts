@@ -32,7 +32,23 @@ export function qFactory(i:any) {
     return i.get("$q");    
 }
 
-// define angular factory provider
+export function httpFactory(i:any) {
+    return i.get("$http");    
+}
+
+export function appConfigFactory(i:any){
+    return i.get("appConfig");    
+}
+
+export function resourceBundlesFactory(i:any) {
+    return i.get("resourceBundles");    
+}
+
+export function injectorFactory(i:any) {
+    return i.get('$injector');    
+}
+
+// define angular factory provider 
 export const parseProvider = {
     provide    : '$parse',
     useFactory : parseFactory,
@@ -61,4 +77,28 @@ export const qProvider = {
     provide    : '$q',
     useFactory : qFactory,
     deps       : ['$injector']    
+};
+
+export const httpProvider = {
+    provide    : '$http',
+    useFactory : httpFactory,
+    deps       : ["$injector"]  
+};
+
+export const appConfigProvider = {
+    provide    : 'appConfig',
+    useFactory : appConfigFactory,
+    deps       : ["$injector"]    
+};
+
+export const resourceBundlesProvider = {
+    provide    : "resourceBundles",
+    useFactory : resourceBundlesFactory,
+    deps       : ["$injector"]    
+};
+
+export const injectorProvider ={
+    provide    : "$injector",
+    useFactory : injectorFactory,
+    deps       : ["$injector"]  
 };

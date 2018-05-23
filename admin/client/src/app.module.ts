@@ -26,12 +26,13 @@ import {GiftCardModule} from "./giftcard/giftcard.module";
 import {OptionGroupModule} from "./optiongroup/optiongroup.module";
 import {OrderFulfillmentModule} from "./orderfulfillment/orderfulfillment.module";
 import {OrderItemModule} from "./orderitem/orderitem.module";
+
+import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider,httpProvider,appConfigProvider,resourceBundlesProvider,injectorProvider } from "./ajs-upgraded-providers"; 
+
 import {ProductModule} from "./product/product.module"; 
 import {ProductBundleModule} from "./productbundle/productbundle.module";
 import {SkuModule} from "./sku/sku.module";
 import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
-
-import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider } from "./ajs-upgraded-providers"; 
 
 
 @NgModule({
@@ -40,7 +41,10 @@ import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider } fr
     logProvider,
     filterProvider,
     timeoutProvider,
-    qProvider
+    qProvider,
+    httpProvider,
+    appConfigProvider,
+    resourceBundlesProvider
   ],
   imports: [
     BrowserModule,
