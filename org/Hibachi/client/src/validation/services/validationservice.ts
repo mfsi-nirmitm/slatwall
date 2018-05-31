@@ -133,10 +133,7 @@ export class ValidationService{
     }
 
     public validateRegex(value:string,pattern:string):boolean{
-        console.log(value);
-        console.log(pattern);
         var regex:RegExp = new RegExp(pattern);
-        console.log(regex.test(value));
         return regex.test(value);
     }
 
