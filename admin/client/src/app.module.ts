@@ -41,7 +41,7 @@ import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 @NgModule({
   providers: [
     AppConfig,
-    { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => AppConfig.fetchData(), deps: [AppConfig], multi: true },
+    { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.fetchData(), deps: [AppConfig], multi: true },
     parseProvider,
     logProvider,
     filterProvider,
