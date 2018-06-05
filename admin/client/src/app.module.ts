@@ -1,5 +1,8 @@
 import {NgModule} from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
+import { HttpModule } from '@angular/http';
+
+
 import {BrowserModule} from '@angular/platform-browser';
 import {UpgradeModule} from '@angular/upgrade/static';
 
@@ -41,7 +44,12 @@ import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 @NgModule({
   providers: [
     AppConfig,
-    { provide: APP_INITIALIZER, useFactory: (config: AppConfig) => () => config.fetchData(), deps: [AppConfig], multi: true },
+    { 
+        provide: APP_INITIALIZER, 
+        useFactory: (config: AppConfig) => () => config.fetchData(), 
+        deps: [AppConfig], 
+        multi: true 
+    },
     parseProvider,
     logProvider,
     filterProvider,
@@ -82,7 +90,8 @@ import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
     ProductModule,
     ProductBundleModule,
     SkuModule,
-    SlatwallAdminModule
+    SlatwallAdminModule,
+    HttpModule
   ],
   declarations:[
       HeroDetailComponent
