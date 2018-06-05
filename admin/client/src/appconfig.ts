@@ -2,12 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 declare var hibachiConfig:any;
+var md5 = require('md5');
 
 @Injectable()
 export class AppConfig{
-    private config: Object = null;
+    private config: any;
+    private attributeMetaData:any;
+    private instantiationKey:string;
+    private _resourceBundle = {};
+    private resourceBundles;
     
-    constructor(private http: Http) {
+    constructor(@Inject('$http') private http: any, @Inject('$q') private $q:any) {
 
     }
     
@@ -51,8 +56,8 @@ export class AppConfig{
         
     }
 
-    getInstantiationKey=(baseURL:string):ng.IPromise<any>=>{
-        return Promise((resolve, reject)=> {
+    getInstantiationKey(baseURL:string):ng.IPromise<any>{
+        return this.$q((resolve, reject)=> {
             if(hibachiConfig.instantiationKey){
                 resolve(hibachiConfig.instantiationKey);
             }else{
@@ -64,7 +69,7 @@ export class AppConfig{
     };
 
 
-    getData=(invalidCache:string[])=>{
+    getData(invalidCache:string[]){
         var promises:{[id:string]:ng.IPromise<any>} ={};
         for(var i in invalidCache){
             var invalidCacheName = invalidCache[i];
@@ -72,7 +77,7 @@ export class AppConfig{
             promises[invalidCacheName] = this['get'+functionName+'Data']();
 
         }
-        return Promise.all(promises);
+        return this.$q.all(promises);
     };
 
     getAttributeCacheKeyData = ()=>{
@@ -141,7 +146,7 @@ export class AppConfig{
     };
 
     getResourceBundle= (locale) => {
-        var deferred = Promise.defer();
+        var deferred = this.$q.defer();
         var locale = locale || this.config.rbLocale;
 
         if(this._resourceBundle[locale]) {
@@ -181,7 +186,7 @@ export class AppConfig{
             //this.getResourceBundle('en_us');
             this.getResourceBundle('en');
         }
-        return Promise.all(rbPromises).then((data) => {
+        return this.$q.all(rbPromises).then((data) => {
             this.resourceBundles = this._resourceBundle;
             //coremodule.constant('resourceBundles',this._resourceBundle);
         },(error) =>{
