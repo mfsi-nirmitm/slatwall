@@ -8,18 +8,25 @@ class HibachiPathBuilder{
 
     //@ngInject
     constructor(){
-
+        console.log("HibachiPathBuilder");
+        console.log(this.baseURL);
+        console.log(this.basePartialsPath);
+        console.log(this.apiSubsystemName);
     }
 
     public setBaseURL = (baseURL:string):void=>{
+        console.log("setBaseURL");
+        console.log(baseURL);
         this.baseURL = baseURL;
     }
 
     public setBasePartialsPath = (basePartialsPath:string):void=>{
+        console.log("setBasePartialsPath");
         this.basePartialsPath = basePartialsPath
     }
 
     public setApiSubsystemName = (apiSubsystemName:string):void=>{
+        console.log("setApiSubsystemName");
         this.apiSubsystemName = apiSubsystemName
     }
 
