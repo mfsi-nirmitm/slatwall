@@ -119,7 +119,13 @@ import {BaseObject} from "./model/baseobject";
         HibachiScope,
         $Hibachi,
         TypeaheadService,
-        EntityService
+        EntityService,
+        CartService,
+        OrderService,
+        { 
+            provide : 'hibachiInterceptor' , 
+            useFactory : HibachiInterceptor.Factory() 
+        }
     ],  
     imports: [
         AlertModule,
@@ -132,7 +138,7 @@ import {BaseObject} from "./model/baseobject";
 
 export class CoreModule{
     constructor() {
-        
+        console.log("core module angular2");
     }    
 }
 
@@ -149,6 +155,7 @@ var coremodule = angular.module('hibachi.core',[
   dialogmodule.name
 ])
 .config(['$compileProvider','$httpProvider','$logProvider','$filterProvider','$provide','hibachiPathBuilder','appConfig',($compileProvider,$httpProvider,$logProvider,$filterProvider,$provide,hibachiPathBuilder,appConfig)=>{
+    console.log("core module");
     hibachiPathBuilder.setBaseURL(appConfig.baseURL);
     hibachiPathBuilder.setBasePartialsPath('/org/Hibachi/client/src/');
 
@@ -256,16 +263,16 @@ var coremodule = angular.module('hibachi.core',[
 .service('typeaheadService', downgradeInjectable(TypeaheadService))
 .service('$hibachi',downgradeInjectable($Hibachi))
 .decorator('$hibachi',HibachiServiceDecorator)
-.service('hibachiInterceptor', HibachiInterceptor.Factory())
+.service('hibachiInterceptor', downgradeInjectable(HibachiInterceptor.Factory()))
 .service('hibachiScope',downgradeInjectable(HibachiScope))
 .service('scopeService',downgradeInjectable(ScopeService))
 .service('skuService', SkuService)
 .service('localStorageService',downgradeInjectable(LocalStorageService))
 .service('requestService',downgradeInjectable(RequestService))
 .service('accountService',AccountService)
-.service('orderService',OrderService)
+.service('orderService',downgradeInjectable(OrderService))
 .service('orderPaymentService',OrderPaymentService)
-.service('cartService',CartService)
+.service('cartService',downgradeInjectable(CartService))
 .service('hibachiValidationService',downgradeInjectable(HibachiValidationService))
 .service('entityService',downgradeInjectable(EntityService))
 //controllers

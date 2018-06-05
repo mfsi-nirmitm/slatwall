@@ -1,5 +1,13 @@
 /// <reference path='../../../typings/hibachiTypescript.d.ts' />
 /// <reference path='../../../typings/tsd.d.ts' />
+import {Injectable,Inject} from "@angular/core";
+import {LocalStorageService} from "./localstorageservice";
+import {AlertService} from "../../alert/service/alertservice";
+import {DialogService} from "../../dialog/services/dialogservice";
+import {UtilityService} from "./utilityservice";
+import {HibachiPathBuilder} from "./hibachipathbuilder";
+import {ObserverService} from "./observerservice";
+
 interface IHibachiConfig{
     baseURL;
     debugFlag;
@@ -32,7 +40,7 @@ interface IHibachiInterceptorPromise<T> extends ng.IPromise<any>{
 }
 
 
-
+@Injectable()
 class HibachiInterceptor implements IInterceptor{
 
 	public static Factory() {
@@ -89,19 +97,19 @@ class HibachiInterceptor implements IInterceptor{
     public baseUrl:string;
 	//@ngInject
     constructor(
-        public $location:ng.ILocationService,
-		public $q:ng.IQService,
-		public $log:ng.ILogService,
-		public $rootScope,
-		public $window,
-		public $injector:ng.auto.IInjectorService,
-		public localStorageService,
-		public alertService,
-		public appConfig:any,
-		public dialogService,
-        public utilityService,
-        public hibachiPathBuilder,
-        public observerService
+        @Inject("$location") public $location:ng.ILocationService,
+		@Inject("$q") public $q:ng.IQService,
+		@Inject("$log") public $log:ng.ILogService,
+		@Inject("$rootScope") public $rootScope,
+		@Inject("$window") public $window,
+		@Inject("$injector") public $injector:ng.auto.IInjectorService,
+		public localStorageService : LocalStorageService,
+		public alertService : AlertService,
+		@Inject("appConfig") public appConfig:any,
+		public dialogService : DialogService,
+        public utilityService : UtilityService,
+        public hibachiPathBuilder : HibachiPathBuilder,
+        public observerService : ObserverService
 	) {
 
         this.$location = $location;
@@ -117,9 +125,12 @@ class HibachiInterceptor implements IInterceptor{
         this.utilityService = utilityService;
         this.hibachiPathBuilder = hibachiPathBuilder;
         this.baseUrl = appConfig.baseURL;
+        console.log("HibachiInterceptor");
     }
     
     public getJWTDataFromToken = (str):void =>{
+        console.log("getJWTDataFromToken");
+        console.log(str);
 	    // Going backwards: from bytestream, to percent-encoding, to original string.
 	    str = str.split('.')[1];
 	    var decodedString = decodeURIComponent(this.$window.atob(str).split('').map((c)=> {
@@ -139,6 +150,8 @@ class HibachiInterceptor implements IInterceptor{
 	}
     
 	public request = (config): ng.IPromise<any> => {
+        console.log("request");
+        console.log(config);
         this.$log.debug('request');
         //bypass interceptor rules when checking template cache
         if(config.url.charAt(0) !== '/'){
@@ -177,9 +190,12 @@ class HibachiInterceptor implements IInterceptor{
 		return config;
     }
     public requestError = (rejection): ng.IPromise<any> => {
+        console.log("requestError");
 		return this.$q.reject(rejection);
     }
     public response = (response): ng.IPromise<any> => {
+        console.log("response");
+        console.log(response);
 		if(response.data.messages){
             var alerts = this.alertService.formatMessagesToAlerts(response.data.messages);
             this.alertService.addAlerts(alerts);
@@ -192,7 +208,7 @@ class HibachiInterceptor implements IInterceptor{
 		return response;
     }
     public responseError = (rejection): ng.IPromise<any> => {
-    	
+    	console.log("responseError");
 		if(angular.isDefined(rejection.status) && rejection.status !== 404 && rejection.status !== 403 && rejection.status !== 499){
 			if(rejection.data && rejection.data.messages){
 				var alerts = this.alertService.formatMessagesToAlerts(rejection.data.messages);
