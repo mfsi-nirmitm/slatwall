@@ -102,12 +102,25 @@ export class AppModule {
   ) { }
   ngDoBootstrap() {
     console.log('bootstrap',this.appProvider);
-    console.log(this.appConfig);
-    console.log(this.resourceBundles);
-    console.log(this.attributeMetaData);
-     coremodule.constant('appConfig',this.appConfig)
-     coremodule.constant('resourceBundles',this.resourceBundles)
-     coremodule.constant('attributeMetaData',this.attributeMetaData)
+    console.log(this.appProvider.appConfig);
+    console.log(this.appProvider._resourceBundle);
+    console.log(this.appProvider.attributeMetaData);
+ 
+    for(var key in this.appProvider.appConfig){
+      this.appConfig[key] = this.appProvider.appConfig[key];
+    }
+    for(var key in this.appProvider._resourceBundle){
+        this.resourceBundles[key] = this.appProvider._resourceBundle[key];
+    }
+    if(this.appProvider.attributeMetaData){
+        for(var key in this.appProvider.attributeMetaData){
+            this.attributeMetaData[key] = this.appProvider.attributeMetaData[key];
+        }
+    }
+
+    coremodule.constant('appConfig', this.appConfig);
+    coremodule.constant('resourceBundles', this.resourceBundles);
+    coremodule.constant('attributeMetaData',this.attributeMetaData);
      
      
      this.upgrade.bootstrap(document.body,[slatwalladminmodule.name]);

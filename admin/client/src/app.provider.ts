@@ -5,9 +5,6 @@ declare var hibachiConfig:any;
 var md5 = require('md5');
 @Injectable()
 export class AppConfig {
-  public debugFlag:boolean;
-  public modelConfig:any={};
-  public applicationKey:string="";
   constructor(){
   }
 }
@@ -148,19 +145,18 @@ export class AppProvider {
       if(hibachiConfig.baseURL.length && hibachiConfig.baseURL.charAt(hibachiConfig.baseURL.length-1) != '/'){
           urlString+='/';
       }
-      return new Promise((resolve,reject)=>{
+      return new Promise((resolve,reject)=>{ 
         this.http.get(urlString+'/custom/config/config.json?instantiationKey='+this.instantiationKey)
         .subscribe( (resp:any)=> {
-          
+            
         	var appConfig = resp.data;
-            if(hibachiConfig.baseURL.length){
+            if(hibachiConfig.baseURL.length){ 
                 appConfig.baseURL=urlString;    
             }
             //coremodule.constant('appConfig',resp.data.data);
-            try{
+            try{ 
                 localStorage.setItem('appConfig',JSON.stringify(resp.data));
             }catch(e){}
-            
             this.appConfig = appConfig;
             
             return this.getResourceBundles();

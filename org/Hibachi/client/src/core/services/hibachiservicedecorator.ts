@@ -21,9 +21,13 @@ class HibachiServiceDecorator{
         observerService,
         hibachiValidationService:HibachiValidationService,
         attributeMetaData
-    ){
+    ){   
             var _deferred = {};
             var _config = appConfig;
+            
+            console.log(Object.keys(appConfig));
+            console.log("decoratorservice",appConfig.action);
+            
 
             var _jsEntities = {};
             var _jsEntityInstances = {};

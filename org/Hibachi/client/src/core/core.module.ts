@@ -99,19 +99,9 @@ import {BaseObject} from "./model/baseobject";
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "../../../../../admin/client/src/app.provider";
 
 export function startupServiceFactory(appProvider: AppProvider,appConfig:AppConfig,resourceBundles:ResourceBundles,attributeMetaData:AttributeMetaData): Function {
-  return () => {
+  return () => { 
     appProvider.fetchData().then(()=>{
-        for(var key in appProvider.appConfig){
-            appConfig[key] = appProvider.appConfig[key];
-        }
-        for(var key in appProvider._resourceBundle){
-            resourceBundles[key] = appProvider._resourceBundle[key];
-        }
-        if(appProvider.attributeMeta){
-            for(var key in appProvider.attributeMetaData){
-                attributeMetaData[key] = appProvider.attributeMetaData[key];
-            }
-        }
+        
     })
     
   };
@@ -162,7 +152,8 @@ export class CoreModule{
 }
 
 declare var $:any;
-
+console.log("inside core module after constructor",AppConfig);
+console.log(Object.keys(AppConfig));
 var coremodule = angular.module('hibachi.core',[
   //Angular Modules
   'ngAnimate',
