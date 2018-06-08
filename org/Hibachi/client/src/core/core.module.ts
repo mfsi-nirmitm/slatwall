@@ -90,17 +90,31 @@ import {dialogmodule} from "../dialog/dialog.module";
 import {AlertModule} from '../alert/alert.module';
 import {DialogModule} from '../dialog/dialog.module';
 
-import {NgModule} from '@angular/core';
+import {NgModule,Inject,APP_INITIALIZER} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {UpgradeModule,downgradeInjectable} from '@angular/upgrade/static';
 
 
 import {BaseObject} from "./model/baseobject";
+import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "../../../../../admin/client/src/app.provider";
 
+export function startupServiceFactory(appProvider: AppProvider,appConfig:AppConfig,resourceBundles:ResourceBundles,attributeMetaData:AttributeMetaData): Function {
+  return () => { 
+    appProvider.fetchData().then(()=>{
+        
+    })
+    
+  };
+}
 
 @NgModule({
     declarations: [],
     providers: [
+        AppProvider,
+        AppConfig,
+        ResourceBundles,
+        AttributeMetaData,
+        { provide: APP_INITIALIZER, useFactory: startupServiceFactory, deps: [AppProvider,AppConfig,ResourceBundles,AttributeMetaData], multi: true },
         LocalStorageService,
         CacheService,
         DraggableService,
@@ -119,7 +133,7 @@ import {BaseObject} from "./model/baseobject";
         HibachiScope,
         $Hibachi,
         TypeaheadService,
-        EntityService
+        EntityService,
     ],  
     imports: [
         AlertModule,
@@ -131,13 +145,15 @@ import {BaseObject} from "./model/baseobject";
 })
 
 export class CoreModule{
-    constructor() {
-        
+    constructor(public appConfig:AppConfig,private appProvider:AppProvider) {
+        console.log('trst',appConfig);
+        console.log('trst',appProvider);
     }    
 }
 
 declare var $:any;
-
+console.log("inside core module after constructor",AppConfig);
+console.log(Object.keys(AppConfig));
 var coremodule = angular.module('hibachi.core',[
   //Angular Modules
   'ngAnimate',
@@ -149,6 +165,8 @@ var coremodule = angular.module('hibachi.core',[
   dialogmodule.name
 ])
 .config(['$compileProvider','$httpProvider','$logProvider','$filterProvider','$provide','hibachiPathBuilder','appConfig',($compileProvider,$httpProvider,$logProvider,$filterProvider,$provide,hibachiPathBuilder,appConfig)=>{
+    
+    
     hibachiPathBuilder.setBaseURL(appConfig.baseURL);
     hibachiPathBuilder.setBasePartialsPath('/org/Hibachi/client/src/');
 
@@ -317,6 +335,8 @@ var coremodule = angular.module('hibachi.core',[
 .directive('swProcessCaller',SWProcessCaller.Factory())
 .directive('sw:sortable',SWSortable.Factory())
 .directive('swOrderByControls', SWOrderByControls.Factory())
+
+
 ;
 export{
 	coremodule
