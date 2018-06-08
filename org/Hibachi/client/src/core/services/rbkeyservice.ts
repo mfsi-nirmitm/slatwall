@@ -22,6 +22,7 @@ export class RbKeyService{
         this.$http = $http;
         this.appConfig = appConfig;
         this.resourceBundles = resourceBundles;
+        debugger;
     }
     getRBLoaded ()  {
 		return this._loadedResourceBundle;
@@ -68,7 +69,7 @@ export class RbKeyService{
 
 				return keyValue;
 			}
-
+            debugger;
 			var bundle = this.resourceBundles[locale];
 			if(angular.isDefined(bundle[key])) {
 				//$log.debug('rbkeyfound:'+bundle[key]);

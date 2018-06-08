@@ -98,23 +98,19 @@ import {UpgradeModule,downgradeInjectable} from '@angular/upgrade/static';
 import {BaseObject} from "./model/baseobject";
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "../../../../../admin/client/src/app.provider";
 
-export function startupServiceFactory(appProvider: AppProvider,appConfig:AppConfig,resourceBundles:ResourceBundles,attributeMetaData:AttributeMetaData): Function {
-  return () => { 
-    appProvider.fetchData().then(()=>{
-        
-    })
-    
-  };
+export function startupServiceFactory(appProvider: AppProvider, appConfig:AppConfig,resourceBundles:ResourceBundles,
+attributeMetaData:AttributeMetaData): Function {
+  return () => appProvider.fetchData();
 }
 
 @NgModule({
     declarations: [],
     providers: [
-        AppProvider,
-        AppConfig,
-        ResourceBundles,
-        AttributeMetaData,
-        { provide: APP_INITIALIZER, useFactory: startupServiceFactory, deps: [AppProvider,AppConfig,ResourceBundles,AttributeMetaData], multi: true },
+//        AppProvider,
+//        AppConfig,
+//        ResourceBundles,
+//        AttributeMetaData,
+//        { provide: APP_INITIALIZER, useFactory: startupServiceFactory, deps: [AppProvider,AppConfig,ResourceBundles,AttributeMetaData], multi: true },
         LocalStorageService,
         CacheService,
         DraggableService,

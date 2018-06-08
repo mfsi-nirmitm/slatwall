@@ -10,6 +10,7 @@ class bootstrapper extends BaseBootStrapper{
     public myApplication;
     constructor(){
         var angular:any = super([hibachimodule.name, loggermodule.name]);
+        debugger;
         angular.bootstrap()
     }
 

@@ -1,4 +1,4 @@
-import {NgModule, Injectable} from '@angular/core';
+import {NgModule, Injectable, APP_INITIALIZER} from '@angular/core';
 
 import { HttpClientModule } from "@angular/common/http";
 import {BrowserModule} from '@angular/platform-browser';
@@ -36,9 +36,21 @@ import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "./app.provider";
 
+export function startupServiceFactory(appProvider: AppProvider, appConfig:AppConfig,resourceBundles:ResourceBundles,
+attributeMetaData:AttributeMetaData): Function {
+  return () => appProvider.fetchData();
+}
+
 
 @NgModule({
   providers: [
+    AppProvider,
+        AppConfig,
+        ResourceBundles,
+        AttributeMetaData,
+        { provide: APP_INITIALIZER, useFactory: startupServiceFactory, 
+        deps: [AppProvider,AppConfig,ResourceBundles,AttributeMetaData], multi: true },
+     
     AppProvider,
     AppConfig,
     ResourceBundles,
@@ -103,6 +115,7 @@ export class AppModule {
   ngDoBootstrap() {
     console.log('bootstrap',this.appProvider);
     console.log(this.appProvider.appConfig);
+    debugger;
     console.log(this.appProvider._resourceBundle);
     console.log(this.appProvider.attributeMetaData);
  
@@ -119,7 +132,7 @@ export class AppModule {
     }
 
     coremodule.constant('appConfig', this.appConfig);
-    coremodule.constant('resourceBundles', this.resourceBundles);
+    //coremodule.constant('resourceBundles', this.resourceBundles);
     coremodule.constant('attributeMetaData',this.attributeMetaData);
      
      
