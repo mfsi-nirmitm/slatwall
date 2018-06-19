@@ -64,36 +64,37 @@ export class AppProvider {
                     var loadResourceBundle: boolean = false;
                     try {
                         this.appConfig = JSON.parse(localStorage.getItem('appConfig'));
-                        if (hibachiConfig.instantiationKey === this.appConfig.instantiationKey) {
-                            debugger;
-                            this.getResourceBundles().then(() => {
-                                resolve();
-                            })
-                                .catch(() => {
-                                resolve();
-
-
-                            });;
-                        } else {
-                            invalidCache.push('instantiationKey');
-                        }
+                        if (hibachiConfig.instantiationKey !== this.appConfig.instantiationKey) {
+                            
+invalidCache.push('instantiationKey');
+                            
+                        } 
                     } catch (e) {
                         invalidCache.push('instantiationKey');
                     }
 
-                    this.getData(invalidCache)
+                    if(invalidCache.length){
+                        this.getData(invalidCache)
                         .then(() => {
                             debugger;
                             resolve();
-                        })
-                        .catch(() => {
-                            resolve();
-
-
+                        }, ()=>{
+                        resolve();    
                         });
 
+              
+                    }
+                    else{
+                        this.getResourceBundles().then(() => {
+                                resolve();
+                            }, ()=>{
+                                    resolve();
 
-                }).catch(() => resolve());
+                            });       
+                    
+                    }
+
+                }, () => resolve()).catch();
 
         });
 
@@ -210,10 +211,6 @@ export class AppProvider {
     public getResourceBundle(locale): Promise<any> | any {
         debugger;
         var locale = locale || this.appConfig.rbLocale;
-
-        //        if (this._resourceBundle[locale]) {
-        //            return this._resourceBundle[locale];
-        //        }
 
         var urlString = this.appConfig.baseURL + '/custom/config/resourceBundles/' + locale + '.json?instantiationKey=' + this.appConfig.instantiationKey;
         //return new Promise((resolve,reject)=>{

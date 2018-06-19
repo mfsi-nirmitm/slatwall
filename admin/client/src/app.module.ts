@@ -115,8 +115,8 @@ export class AppModule {
   ngDoBootstrap() {
     console.log('bootstrap',this.appProvider);
     console.log(this.appProvider.appConfig);
-    debugger;
     console.log(this.appProvider._resourceBundle);
+    debugger;
     console.log(this.appProvider.attributeMetaData);
  
     for(var key in this.appProvider.appConfig){
