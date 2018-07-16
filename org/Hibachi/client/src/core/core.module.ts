@@ -6,19 +6,20 @@ import { HibachiInterceptor, IHibachi, IHibachiConfig, HibachiJQueryStatic } fro
 import { HibachiPathBuilder } from "./services/hibachipathbuilder";
 
 //services
-import { CacheService } from "./services/cacheservice";
-import { PublicService } from "./services/publicservice";
-import { AccountService } from "./services/accountservice";
-import { CartService } from "./services/cartservice";
-import { DraggableService } from "./services/draggableservice";
-import { UtilityService } from "./services/utilityservice";
-import { SelectionService } from "./services/selectionservice";
-import { ObserverService } from "./services/observerservice";
-import { OrderService } from "./services/orderservice";
-import { OrderPaymentService } from "./services/orderpaymentservice";
-import { FormService } from "./services/formservice";
-import { FilterService } from "./services/filterservice";
-import { ExpandableService } from "./services/expandableservice";
+import {CacheService} from "./services/cacheservice";
+import {PublicService} from "./services/publicservice";
+import {AccountService} from "./services/accountservice";
+import {AccountAddressService} from "./services/accountaddressservice";
+import {CartService} from "./services/cartservice";
+import {DraggableService} from "./services/draggableservice";
+import {UtilityService} from "./services/utilityservice";
+import {SelectionService} from "./services/selectionservice";
+import {ObserverService} from "./services/observerservice";
+import {OrderService} from "./services/orderservice";
+import {OrderPaymentService} from "./services/orderpaymentservice";
+import {FormService} from "./services/formservice";
+import {FilterService} from "./services/filterservice";
+import {ExpandableService} from "./services/expandableservice";
 
 import { MetaDataService } from "./services/metadataservice";
 import { RbKeyService } from "./services/rbkeyservice";
@@ -83,8 +84,8 @@ import { SWHref } from "./components/swhref";
 import { SWProcessCaller } from "./components/swprocesscaller";
 import { SWSortable } from "./components/swsortable";
 import { SWOrderByControls } from "./components/sworderbycontrols";
-
 //modules
+
 import { alertmodule } from "../alert/alert.module";
 import { dialogmodule } from "../dialog/dialog.module";
 import { AlertModule } from '../alert/alert.module';
@@ -94,7 +95,6 @@ import { NgModule, Inject, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UpgradeModule, downgradeInjectable } from '@angular/upgrade/static';
 
-
 import { BaseObject } from "./model/baseobject";
 import { AppProvider, AppConfig, ResourceBundles, AttributeMetaData } from "../../../../../admin/client/src/app.provider";
 
@@ -103,7 +103,6 @@ export function startupServiceFactory(appProvider: AppProvider, appConfig: AppCo
     
         appProvider.fetchData().then(() => {
             for (var key in appProvider.appConfig) {
-
                 appConfig[key] = appProvider.appConfig[key];
             }
             if (appProvider.attributeMetaData) {
@@ -117,11 +116,7 @@ export function startupServiceFactory(appProvider: AppProvider, appConfig: AppCo
             } 
             console.log(appProvider);
             appProvider.hasData = true;
-
         });
-
-
-
     };
 }
 
@@ -152,16 +147,16 @@ export function startupServiceFactory(appProvider: AppProvider, appConfig: AppCo
         $Hibachi,
         TypeaheadService,
         EntityService,
-        CartService,
-        OrderService,
+        CartService,        
+        AccountAddressService,
         AccountService,
         SkuService,
         HibachiPathBuilder,
-        { provide: Array, useValue: [] },
-        { provide: Number, useValue: 0 },
-        { provide: Boolean, useValue: false },
-        { provide: String, useValue: "stringValue" },
-        OrderPaymentService,
+        { provide : Array, useValue : []},
+        { provide : Number, useValue : 0},
+        { provide : Boolean, useValue : false},
+        { provide : String, useValue:"stringValue"},
+        OrderService,
         OrderPaymentService,
         PublicService,
         HibachiInterceptor
@@ -208,7 +203,6 @@ var coremodule = angular.module('hibachi.core', [
             return function (text) {
                 if (angular.isDefined(text) && angular.isString(text)) {
                     return text.replace(new RegExp('%', 'g'), '');
-
                 }
             };
         });
@@ -270,103 +264,105 @@ var coremodule = angular.module('hibachi.core', [
         $httpProvider.useApplyAsync(true);
 
     }])
-    .run(['$rootScope', '$hibachi', '$route', '$location', 'rbkeyService', ($rootScope, $hibachi, $route, $location, rbkeyService) => {
-        $rootScope.buildUrl = $hibachi.buildUrl;
-        $rootScope.rbKey = rbkeyService.rbKey;
-        var original = $location.path;
-        $location.path = function (path, reload) {
-            if (reload === false) {
-                var lastRoute = $route.current;
-                var un = $rootScope.$on('$locationChangeSuccess', function () {
-                    $route.current = lastRoute;
-                    un();
-                });
-            }
-            return original.apply($location, [path]);
-        };
-    }])
-    .constant('hibachiPathBuilder', new HibachiPathBuilder())
-    .constant('corePartialsPath', 'core/components/')
-    //services
-    .service('cacheService', downgradeInjectable(CacheService))
-    .service('publicService', downgradeInjectable(PublicService))
-    .service('utilityService', downgradeInjectable(UtilityService))
-    .service('selectionService', downgradeInjectable(SelectionService))
-    .service('observerService', downgradeInjectable(ObserverService))
-    .service('draggableService', downgradeInjectable(DraggableService))
-    .service('expandableService', downgradeInjectable(ExpandableService))
-    .service('filterService', downgradeInjectable(FilterService))
-    .service('formService', downgradeInjectable(FormService))
-    .service('historyService', downgradeInjectable(HistoryService))
-    .service('metadataService', downgradeInjectable(MetaDataService))
-    .service('rbkeyService', downgradeInjectable(RbKeyService))
-    .service('typeaheadService', downgradeInjectable(TypeaheadService))
-    .service('$hibachi', downgradeInjectable($Hibachi))
-    //.decorator('$hibachi',HibachiServiceDecorator)
-    .service('hibachiInterceptor', downgradeInjectable(HibachiInterceptor))
-    .service('hibachiScope', downgradeInjectable(HibachiScope))
-    .service('scopeService', downgradeInjectable(ScopeService))
-    .service('skuService', downgradeInjectable(SkuService))
-    .service('localStorageService', downgradeInjectable(LocalStorageService))
-    .service('requestService', downgradeInjectable(RequestService))
-    .service('orderService', downgradeInjectable(OrderService))
-    .service('accountService', downgradeInjectable(AccountService))
-    .service('orderPaymentService', downgradeInjectable(OrderPaymentService))
-    .service('cartService', downgradeInjectable(CartService))
-    .service('hibachiValidationService', downgradeInjectable(HibachiValidationService))
-    .service('entityService', downgradeInjectable(EntityService))
-    //controllers
-    .controller('globalSearch', GlobalSearchController)
-    //filters
-    .filter('dateFilter', ['$filter', DateFilter.Factory])
-    .filter('percentage', [PercentageFilter.Factory])
-    .filter('trim', [SWTrim.Factory])
-    .filter('entityRBKey', ['rbkeyService', EntityRBKey.Factory])
-    .filter('swdate', ['$filter', DateFilter.Factory])
-    .filter('unique', [SWUnique.Factory])
-    //directives
-    .directive('swCollectionConfig', SWCollectionConfig.Factory())
-    .directive('swCollectionColumn', SWCollectionColumn.Factory())
-    .directive('swCollectionFilter', SWCollectionFilter.Factory())
-    .directive('swCollectionOrderBy', SWCollectionOrderBy.Factory())
-    .directive('swTypeaheadSearch', SWTypeaheadSearch.Factory())
-    .directive('swTypeaheadInputField', SWTypeaheadInputField.Factory())
-    .directive('swTypeaheadMultiselect', SWTypeaheadMultiselect.Factory())
-    .directive('swTypeaheadSearchLineItem', SWTypeaheadSearchLineItem.Factory())
-    .directive('swTypeaheadRemoveSelection', SWTypeaheadRemoveSelection.Factory())
-    .directive('swActionCaller', SWActionCaller.Factory())
-    .directive('swActionCallerDropdown', SWActionCallerDropdown.Factory())
-    .directive('swColumnSorter', SWColumnSorter.Factory())
-    .directive('swConfirm', SWConfirm.Factory())
-    .directive('swEntityActionBar', SWEntityActionBar.Factory())
-    .directive('swEntityActionBarButtonGroup', SWEntityActionBarButtonGroup.Factory())
-    .directive('swExpandableRecord', SWExpandableRecord.Factory())
-    .directive('swExpiringSessionNotifier', SWExpiringSessionNotifier.Factory())
-    .directive('swGravatar', SWGravatar.Factory())
-    .directive('swDraggable', SWDraggable.Factory())
-    .directive('swDraggableContainer', SWDraggableContainer.Factory())
-    .directive('swLogin', SWLogin.Factory())
-    .directive('swModalLauncher', SWModalLauncher.Factory())
-    .directive('swModalWindow', SWModalWindow.Factory())
-    .directive('swNumbersOnly', SWNumbersOnly.Factory())
-    .directive('swLoading', SWLoading.Factory())
-    .directive('swScrollTrigger', SWScrollTrigger.Factory())
-    .directive('swRbkey', SWRbKey.Factory())
-    .directive('swOptions', SWOptions.Factory())
-    .directive('swSelection', SWSelection.Factory())
-    .directive('swTabGroup', SWTabGroup.Factory())
-    .directive('swTabContent', SWTabContent.Factory())
-    .directive('swTooltip', SWTooltip.Factory())
-    .directive('swClickOutside', SWClickOutside.Factory())
-    .directive('swDirective', SWDirective.Factory())
-    .directive('swExportAction', SWExportAction.Factory())
-    .directive('swHref', SWHref.Factory())
-    .directive('swProcessCaller', SWProcessCaller.Factory())
-    .directive('sw:sortable', SWSortable.Factory())
-    .directive('swOrderByControls', SWOrderByControls.Factory())
 
+}])
+.run(['$rootScope','$hibachi', '$route', '$location','rbkeyService',($rootScope,$hibachi, $route, $location,rbkeyService)=>{
+    $rootScope.buildUrl = $hibachi.buildUrl;
+    $rootScope.rbKey = rbkeyService.rbKey;
+    var original = $location.path;
+    $location.path = function (path, reload) {
+        if (reload === false) {
+            var lastRoute = $route.current;
+            var un = $rootScope.$on('$locationChangeSuccess', function () {
+                $route.current = lastRoute;
+                un();
+            });
+        }
+        return original.apply($location, [path]);
+    };
+}])
+.constant('hibachiPathBuilder', new HibachiPathBuilder())
+.constant('corePartialsPath','core/components/')
+//services
+.service('cacheService', downgradeInjectable(CacheService))
+.service('publicService',downgradeInjectable(PublicService))
+.service('utilityService',downgradeInjectable(UtilityService))
+.service('selectionService',downgradeInjectable(SelectionService))
+.service('observerService',downgradeInjectable(ObserverService))
+.service('draggableService',downgradeInjectable(DraggableService))
+.service('expandableService',downgradeInjectable(ExpandableService))
+.service('filterService',downgradeInjectable(FilterService))
+.service('formService',downgradeInjectable(FormService))
+.service('historyService',downgradeInjectable(HistoryService))
+.service('metadataService',downgradeInjectable(MetaDataService))
+.service('rbkeyService',downgradeInjectable(RbKeyService))
+.service('typeaheadService', downgradeInjectable(TypeaheadService))
+.service('$hibachi',downgradeInjectable($Hibachi))
+//.decorator('$hibachi',HibachiServiceDecorator)
+.service('hibachiInterceptor', downgradeInjectable(HibachiInterceptor))
+.service('hibachiScope',downgradeInjectable(HibachiScope))
+.service('scopeService',downgradeInjectable(ScopeService))
+.service('skuService',downgradeInjectable(SkuService))
+.service('localStorageService',downgradeInjectable(LocalStorageService))
+.service('requestService',downgradeInjectable(RequestService))
+.service('accountAddressService',downgradeInjectable(AccountAddressService))
+.service('accountService',downgradeInjectable(AccountService))
+.service('orderService',downgradeInjectable(OrderService))
+.service('orderPaymentService',downgradeInjectable(OrderPaymentService))
+.service('cartService',downgradeInjectable(CartService))
+.service('hibachiValidationService',downgradeInjectable(HibachiValidationService))
+.service('entityService',downgradeInjectable(EntityService))
 
-    ;
+//controllers
+.controller('globalSearch',GlobalSearchController)
+//filters
+.filter('dateFilter',['$filter',DateFilter.Factory])
+.filter('percentage',[PercentageFilter.Factory])
+.filter('trim', [SWTrim.Factory])
+.filter('entityRBKey',['rbkeyService',EntityRBKey.Factory])
+.filter('swdate',['$filter',DateFilter.Factory])
+.filter('unique',[SWUnique.Factory])
+//directives
+.directive('swCollectionConfig',SWCollectionConfig.Factory())
+.directive('swCollectionColumn',SWCollectionColumn.Factory())
+.directive('swCollectionFilter',SWCollectionFilter.Factory())
+.directive('swCollectionOrderBy',SWCollectionOrderBy.Factory())
+.directive('swTypeaheadSearch',SWTypeaheadSearch.Factory())
+.directive('swTypeaheadInputField',SWTypeaheadInputField.Factory())
+.directive('swTypeaheadMultiselect', SWTypeaheadMultiselect.Factory())
+.directive('swTypeaheadSearchLineItem', SWTypeaheadSearchLineItem.Factory())
+.directive('swTypeaheadRemoveSelection', SWTypeaheadRemoveSelection.Factory())
+.directive('swActionCaller',SWActionCaller.Factory())
+.directive('swActionCallerDropdown',SWActionCallerDropdown.Factory())
+.directive('swColumnSorter',SWColumnSorter.Factory())
+.directive('swConfirm',SWConfirm.Factory())
+.directive('swEntityActionBar',SWEntityActionBar.Factory())
+.directive('swEntityActionBarButtonGroup',SWEntityActionBarButtonGroup.Factory())
+.directive('swExpandableRecord',SWExpandableRecord.Factory())
+.directive('swExpiringSessionNotifier',SWExpiringSessionNotifier.Factory())
+.directive('swGravatar', SWGravatar.Factory())
+.directive('swDraggable',SWDraggable.Factory())
+.directive('swDraggableContainer', SWDraggableContainer.Factory())
+.directive('swLogin',SWLogin.Factory())
+.directive('swModalLauncher',SWModalLauncher.Factory())
+.directive('swModalWindow', SWModalWindow.Factory())
+.directive('swNumbersOnly',SWNumbersOnly.Factory())
+.directive('swLoading',SWLoading.Factory())
+.directive('swScrollTrigger',SWScrollTrigger.Factory())
+.directive('swRbkey',SWRbKey.Factory())
+.directive('swOptions',SWOptions.Factory())
+.directive('swSelection',SWSelection.Factory())
+.directive('swTabGroup', SWTabGroup.Factory())
+.directive('swTabContent', SWTabContent.Factory())
+.directive('swTooltip', SWTooltip.Factory())
+.directive('swClickOutside',SWClickOutside.Factory())
+.directive('swDirective',SWDirective.Factory())
+.directive('swExportAction',SWExportAction.Factory())
+.directive('swHref',SWHref.Factory())
+.directive('swProcessCaller',SWProcessCaller.Factory())
+.directive('sw:sortable',SWSortable.Factory())
+.directive('swOrderByControls', SWOrderByControls.Factory())
+ ;
 export {
     coremodule
 }
