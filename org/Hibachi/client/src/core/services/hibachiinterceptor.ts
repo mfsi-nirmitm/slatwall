@@ -153,45 +153,43 @@ export class HibachiInterceptor implements IInterceptor{
 
         return function (config): ng.IPromise<any> {
             ref.$log.debug('request');
-            console.log(config);
             //bypass interceptor rules when checking template cache
             if (config.url.charAt(0) !== '/') {
-                console.log("case 1");
                 return config;
             }
 
             if (config.method == 'GET' && config.url.indexOf('.html') >= 0 && config.url.indexOf('/') >= 0) {
                 //all partials are bound to instantiation key
                 config.url = config.url + '?instantiationKey=' + ref.appConfig.instantiationKey;
-                console.log("case 2");
                 return config;
             }
             config.cache = true;
             config.headers = config.headers || {};
             if (ref.localStorageService.hasItem('token')) {
-                console.log("token case");
                 config.headers['Auth-Token'] = 'Bearer ' + ref.localStorageService.getItem('token');
                 ref.getJWTDataFromToken(ref.localStorageService.getItem('token'));
             }
             var queryParams = ref.utilityService.getQueryParamsFromUrl(config.url);
-            console.log(queryParams);
             if (config.method == 'GET' && (queryParams[ref.appConfig.action] && queryParams[ref.appConfig.action] === 'api:main.get')) {
                 ref.$log.debug(config);
-                console.log("case 3");
                 config.method = 'POST';
                 config.data = {};
                 var data = {};
                 if (angular.isDefined(config.params)) {
                     data = config.params;
-                    console.log(config.params);
                 }
                 var params: IParams = {};
-                console.log(data);
                 params.serializedJsonData = angular.toJson(data);
                 params.context = "GET";
                 config.data = $.param(params);
                 delete config.params;
                 config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            }
+            else if((queryParams[ref.appConfig.action] && queryParams[ref.appConfig.action].indexOf('api:main.get')!==-1)){
+                if(!config.data){
+                    config.data = {};
+                }
+                config.data.context = 'GET';
             }
 
             return config;

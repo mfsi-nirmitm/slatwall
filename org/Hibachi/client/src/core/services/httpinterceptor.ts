@@ -101,7 +101,7 @@ export class HttpInterceptor extends Http {
             if (config.url.charAt(0) !== '/') {
                 return super.request(config, options);
             }
-            if (config.method == RequestMethod.Get && config.url.indexOf('.html') >= 0 && config.url.indexOf('/') >= 0) {
+            if (config.method === RequestMethod.Get && config.url.indexOf('.html') >= 0 && config.url.indexOf('/') >= 0) {
                 //all partials are bound to instantiation key
                 config.url = config.url + '?instantiationKey=' + this.appConfig.instantiationKey;
                 return super.request(config, options);
@@ -112,7 +112,7 @@ export class HttpInterceptor extends Http {
                 this.getJWTDataFromToken(this.localStorageService.getItem('token'));
             }
             var queryParams = this.utilityService.getQueryParamsFromUrl(config.url);
-            if (config.method == RequestMethod.Get && (queryParams[this.appConfig.action] && queryParams[this.appConfig.action] === 'api:main.get')) {
+            if (config.method === RequestMethod.Get && (queryParams[this.appConfig.action] && queryParams[this.appConfig.action] === 'api:main.get')) {
                 this.$log.debug(config);
                 config.method = RequestMethod.Post;
                 config["_body"] = {};
@@ -120,17 +120,115 @@ export class HttpInterceptor extends Http {
                 if (angular.isDefined(config['params'])) {
                     data = config['params'];
                 }
-
                 var params = { 'serializedJsonData' : angular.toJson(data), 'context' : 'GET'  };
-                
                 config['_body'] = $.param(params);
                 delete config['params'];
                 config.headers.set('Content-Type', 'application/x-www-form-urlencoded');
-                
+            }
+            else if((queryParams[this.appConfig.action] && queryParams[this.appConfig.action].indexOf('api:main.get')!==-1)){
+                if(!config["_body"]){
+                    config["_body"] = {};
+                }
+                config["_body"] = { context : 'GET' };
             }
         }
             
-        return super.request(config, options);
+        return super.request(config, options);//.catch(console.log("error"));
+    }
+    
+    get(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return super.get(url, options)
+            .catch(this.onCatch)
+            .do((res:Response)=>{
+                this.onSuccess(res);
+            },(error:any) => {
+                this.onError(error);
+            });
+    }
+    
+    post(url: string, body: string, options?: RequestOptionsArgs): Observable<any> {
+        return super.post(url,body, options)
+            .catch(this.onCatch)
+            .do((res:Response)=>{
+                this.onSuccess(res);
+            },(error:any) => {
+                this.onError(error);
+            });
+    }
+    
+    delete(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return super.delete(url, options)
+            .catch(this.onCatch)
+            .do((res:Response)=>{
+                this.onSuccess(res);
+            },(error:any) => {
+                this.onError(error);
+            });
+    }
+    
+    put(url: string, body: string, options?: RequestOptionsArgs): Observable<any> {
+        return super.put(url,body, options)
+            .catch(this.onCatch)
+            .do((res:Response)=>{
+                this.onSuccess(res);
+            },(error:any) => {
+                this.onError(error);
+            });
+    }
+    
+    private onSuccess(response: Response): void {
+        if(response["_body"].messages) {
+            var alerts = this.alertService.formatMessagesToAlerts(response["_body"].messages);
+            this.alertService.addAlerts(alerts);
+        }
+        if(response["_body"].hasOwnProperty('token')){
+            this.localStorageService.setItem('token',response["_body"].token);
+        }
+    }
+    
+    private onError(rejection: any): any {
+        if(rejection.status !== undefined && rejection.status !== 404 && rejection.status !== 403 && rejection.status !== 499){
+            if(rejection["_body"] && rejection["_body"].messages){
+                var alerts = this.alertService.formatMessagesToAlerts(rejection["_body"].messages);
+                this.alertService.addAlerts(alerts);
+            }else{
+                var message = {
+                    msg:'there was error retrieving data',
+                    type:'error'
+                };
+                this.alertService.addAlert(message);
+            }
+        }
+        if(rejection.status === 403 || rejection.status == 401){
+            this.observerService.notify('Unauthorized');
+        }
+        if (rejection.status === 499) {
+            // handle the case where the user is not authenticated
+            if(rejection["_body"] && rejection["_body"].messages){
+                //var deferred = $q.defer();
+                if(rejection["_body"].messages[0].message === 'timeout'){
+                    //open dialog
+                    this.dialogService.addPageDialog(this.hibachiPathBuilder.buildPartialsPath('preprocesslogin'),{} );
+                }else if(rejection["_body"].messages[0].message === 'invalid_token'){
+                    return this.get(this.baseUrl+'?'+this.appConfig.action+'=api:main.login').subscribe((loginResponse)=>{
+                        if(loginResponse.status === 200){
+                            this.localStorageService.setItem('token',loginResponse["_body"].token);
+                            rejection.config.headers = rejection.config.headers || {};
+                            rejection.config.headers['Auth-Token'] = 'Bearer ' + loginResponse["_body"].token;
+                            this.getJWTDataFromToken(loginResponse["_body"].token);
+                                
+                            return this.request(rejection.config).subscribe(function(response) {
+                                return response;
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    }
+    
+    private onCatch(error: any, caught: Observable<any>): Observable<any> {
+        return Observable.throw(error);
     }
     
 }
