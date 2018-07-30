@@ -161,7 +161,6 @@ export class HibachiInterceptor implements IInterceptor{
             if (config.method == 'GET' && config.url.indexOf('.html') >= 0 && config.url.indexOf('/') >= 0) {
                 //all partials are bound to instantiation key
                 config.url = config.url + '?instantiationKey=' + ref.appConfig.instantiationKey;
-
                 return config;
             }
             config.cache = true;
@@ -185,6 +184,12 @@ export class HibachiInterceptor implements IInterceptor{
                 config.data = $.param(params);
                 delete config.params;
                 config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            }
+            else if((queryParams[ref.appConfig.action] && queryParams[ref.appConfig.action].indexOf('api:main.get')!==-1)){
+                if(!config.data){
+                    config.data = {};
+                }
+                config.data.context = 'GET';
             }
 
             return config;
