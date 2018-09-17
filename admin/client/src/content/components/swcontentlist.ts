@@ -199,6 +199,7 @@ class SWContentListController{
                 this.collectionListingPromise.then((value)=>{
                     this.$timeout(()=>{
                         this.collection = value;
+                        console.log(this.collection);
                         this.collection.collectionConfig = this.collectionConfig;
 
                         this.firstLoad = true;

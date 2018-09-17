@@ -181,6 +181,8 @@ export class ListingService{
     }
 
     public getPageRecordsWithManualSortOrder(listingID:string) {
+        console.log(this);
+        debugger;
         if( angular.isDefined(this.getListing(listingID)) && this.getListingPageRecords(listingID) != null ){
             var pageRecords = this.getListingPageRecords(listingID);
             var primaryIDPropertyName = this.getListingEntityPrimaryIDPropertyName(listingID);
