@@ -35,6 +35,7 @@ class SWRbKey{
 		$log,
         rbkeyService
 	){
+        console.log("swrbkey file");
 		return {
 			restrict: 'A',
 			scope:{
@@ -45,12 +46,18 @@ class SWRbKey{
 
 				var bindRBKey = ()=>{
 					if(angular.isDefined(rbKeyValue) && angular.isString(rbKeyValue)){
+                        console.log(rbKeyValue)
+                        console.log(rbkeyService.getRBKey(rbKeyValue));
+                        console.log(element);
+                        //console.log(element.text(rbkeyService.getRBKey(rbKeyValue)));
 						element.text(rbkeyService.getRBKey(rbKeyValue));
 					}
 				}
-
+                console.log("here");
 
 				bindRBKey();
+                
+                console.log("here");
 
 			}
 		};
@@ -58,4 +65,48 @@ class SWRbKey{
 }
 export{
 	SWRbKey
+}
+
+import { Directive,Inject,Input,ElementRef,OnInit } from "@angular/core";
+
+import { $Hibachi } from "../services/hibachiservice";
+import { ObserverService } from "../services/observerservice";
+import { UtilityService } from "../services/utilityservice";
+import { RbKeyService } from "../services/rbkeyservice";
+
+@Directive({
+    selector: "[sw-rbkey]"
+})
+
+export class SWRBKey implements OnInit {
+        
+    @Input() private swrbkey;
+    
+    constructor(
+        private $hibachi: $Hibachi,
+        private observerService : ObserverService,
+        private utilityService : UtilityService,
+        @Inject('$rootScope') private $rootScope : any ,
+        @Inject('$log') private  $log : any,
+        private rbkeyService : RbKeyService,
+        private el: ElementRef
+    ) {
+        this.bindRBKey();
+        console.log("here in swrbkey 2");
+    }
+
+    ngOnInit() {
+        console.log("ngOnInit");     
+    }
+    
+    bindRBKey = function(){
+        console.log("here 2");
+        let rbKeyValue = this.swrbkey;
+        if(angular.isDefined(rbKeyValue) && angular.isString(rbKeyValue)){
+            //angular.element.text(this.rbkeyService.getRBKey(rbKeyValue));
+            console.log("here 2");
+        }
+    }
+    
+    
 }

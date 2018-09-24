@@ -12,6 +12,8 @@ import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider,http
 import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "./app.provider";
 
+import { SWRBKey } from "../../../org/Hibachi/client/src/core/components/swrbkey";
+
 
 @NgModule({
   providers: [
@@ -39,7 +41,8 @@ import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "./app.pro
     SlatwallAdminModule
   ],
   declarations:[
-      HeroDetailComponent
+      HeroDetailComponent,
+      SWRBKey
   ],
   entryComponents: [
     HeroDetailComponent
