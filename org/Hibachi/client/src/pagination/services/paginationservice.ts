@@ -141,7 +141,7 @@ export class Pagination{
     
     
     
-    public setPageRecordsInfo (collection):void {
+    public setPageRecordsInfo =(collection):void => {
         this.setRecordsCount(collection.recordsCount);
         if(this.getRecordsCount() === 0 ){
             this.setPageStart(0);

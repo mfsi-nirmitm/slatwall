@@ -37,7 +37,7 @@ class SWDetail{
 	        link: function (scope, element, attr) {
 	        	scope.$id="slatwallDetailController";
 	        	$log.debug('slatwallDetailController');
-
+				console.log("here in entity swdetail.ts file");
 				/*Sets the view dirty on save*/
 				scope.setDirty = function(entity){
 					angular.forEach(entity.forms,function(form){
@@ -89,4 +89,23 @@ class SWDetail{
 }
 export{
 	SWDetail
+}
+
+import { Component,Inject } from '@angular/core';
+import { $Hibachi } from '../../core/services/hibachiservice';
+import { HibachiPathBuilder } from '../../core/services/hibachipathbuilder';
+
+@Component({
+	selector: 'sw-detail',
+	templateUrl: './detail.html'
+})
+export class SwDetail {
+	constructor(
+		@Inject('$location') private $location: any,
+		@Inject('$log') private $log: any,
+		private $hibachi: $Hibachi,
+		private hibachiPathBuilder: HibachiPathBuilder
+	){}
+
+	
 }

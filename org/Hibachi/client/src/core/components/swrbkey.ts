@@ -75,36 +75,42 @@ import { UtilityService } from "../services/utilityservice";
 import { RbKeyService } from "../services/rbkeyservice";
 
 @Directive({
-    selector: "[sw-rbkey]"
+	selector: '[sw-rbkey]',
+	providers : [RbKeyService]
 })
 
 export class SWRBKey implements OnInit {
         
-    @Input() private swrbkey;
+    @Input() private swrbkey:any;
     
     constructor(
-        private $hibachi: $Hibachi,
-        private observerService : ObserverService,
-        private utilityService : UtilityService,
-        @Inject('$rootScope') private $rootScope : any ,
-        @Inject('$log') private  $log : any,
+        //private $hibachi: $Hibachi,
+        //private observerService : ObserverService,
+        // private utilityService : UtilityService,
+        // @Inject('$rootScope') private $rootScope : any ,
+        // @Inject('$log') private  $log : any,
         private rbkeyService : RbKeyService,
         private el: ElementRef
     ) {
-        this.bindRBKey();
+        
         console.log("here in swrbkey 2");
     }
 
     ngOnInit() {
-        console.log("ngOnInit");     
+		console.log("ngOnInit");    
+		console.log(this.swrbkey); 
+        this.bindRBKey();
     }
     
     bindRBKey = function(){
         console.log("here 2");
-        let rbKeyValue = this.swrbkey;
+		let rbKeyValue = this.swrbkey;
+		console.log(this.swrbkey);
         if(angular.isDefined(rbKeyValue) && angular.isString(rbKeyValue)){
             //angular.element.text(this.rbkeyService.getRBKey(rbKeyValue));
-            console.log("here 2");
+			console.log("here 3");
+			//this.el.nativeElement.innerHTML = 'please select an option';
+			this.el.nativeElement.innerHTML = this.rbkeyService.getRBKey(rbKeyValue);
         }
     }
     

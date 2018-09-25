@@ -89,6 +89,7 @@ class SWOptionsForOptionGroup implements ng.IDirective{
                 private collectionConfigService,
                 private observerService, private optionGroupPartialsPath, slatwallPathBuilder
     ){
+        console.log("here in option group");
         this.templateUrl = slatwallPathBuilder.buildPartialsPath(optionGroupPartialsPath) + "optionsforoptiongroup.html";
     }
 

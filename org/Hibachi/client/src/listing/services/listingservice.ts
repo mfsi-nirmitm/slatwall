@@ -23,7 +23,7 @@ export class ListingService{
 
     //@ngInject
     constructor(@Inject("$timeout") private $timeout : any,
-                @Inject("$timeout") private $q :any,
+                @Inject("$q") private $q :any,
                 private collectionConfigService : CollectionConfig,
                 private filterService : FilterService,
                 private historyService : HistoryService,
@@ -180,7 +180,7 @@ export class ListingService{
         return this.getListing(listingID).getCollection();
     }
 
-    public getPageRecordsWithManualSortOrder(listingID:string) {
+    public getPageRecordsWithManualSortOrder = (listingID:string) =>{
         if( angular.isDefined(this.getListing(listingID)) && this.getListingPageRecords(listingID) != null ){
             var pageRecords = this.getListingPageRecords(listingID);
             var primaryIDPropertyName = this.getListingEntityPrimaryIDPropertyName(listingID);

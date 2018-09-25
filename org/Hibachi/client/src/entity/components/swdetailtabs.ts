@@ -31,3 +31,14 @@ class SWDetailTabs{
 export{
 	SWDetailTabs
 }
+
+import { Component } from '@angular/core';
+
+@Component({
+	selector: 'sw-detail-tabs',
+	templateUrl: './detailtabs.html'
+})
+export class SwDetailTabs {
+	constructor() {}
+
+}
