@@ -76,7 +76,7 @@ import { SWScrollTrigger } from "./components/swscrolltrigger";
 import { SWTabGroup } from "./components/swtabgroup";
 import { SWTabContent } from "./components/swtabcontent";
 import { SWTooltip } from "./components/swtooltip";
-import { SWRbKey } from "./components/swrbkey";
+import { SWRbKey,SwRbKey } from "./components/swrbkey";
 import { SWOptions } from "./components/swoptions";
 import { SWSelection } from "./components/swselection";
 import { SWClickOutside } from "./components/swclickoutside";
@@ -95,7 +95,7 @@ import { DialogModule } from '../dialog/dialog.module';
 
 import { NgModule, Inject, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UpgradeModule, downgradeInjectable } from '@angular/upgrade/static';
+import { UpgradeModule, downgradeInjectable, downgradeComponent } from '@angular/upgrade/static';
 
 
 import { BaseObject } from "./model/baseobject";
@@ -355,7 +355,8 @@ var coremodule = angular.module('hibachi.core', [
     .directive('swNumbersOnly', SWNumbersOnly.Factory())
     .directive('swLoading', SWLoading.Factory())
     .directive('swScrollTrigger', SWScrollTrigger.Factory())
-    .directive('swRbkey', SWRbKey.Factory())
+    //.directive('swRbkey', SWRbKey.Factory())
+    .directive('swRbkey', downgradeComponent({ component: SwRbKey }) as angular.IDirectiveFactory)
     .directive('swOptions', SWOptions.Factory())
     .directive('swSelection', SWSelection.Factory())
     .directive('swTabGroup', SWTabGroup.Factory())
