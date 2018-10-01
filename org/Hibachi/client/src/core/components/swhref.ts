@@ -15,6 +15,7 @@ class SWHref{
 	constructor(
 
 	){
+        console.log("swhref angularjs constructor");
 		return {
 			restrict: 'A',
 			scope:{
@@ -23,6 +24,7 @@ class SWHref{
 			link: function(scope, element,attrs){
 				/*convert link to use hashbang*/
 				var hrefValue = attrs.swHref;
+                console.log(hrefValue);
 				hrefValue = '?ng#!'+hrefValue;
 				element.attr('href',hrefValue);
 			}
@@ -31,5 +33,28 @@ class SWHref{
 }
 export{
 	SWHref
+}
+
+import { Directive,Input,ElementRef,OnInit } from '@angular/core';
+
+@Directive({
+    selector: '[sw-href]'    
+})
+export class SwHref implements OnInit {
+        
+    @Input() private swhref:any;
+    
+    constructor(
+        private elementRef: ElementRef
+    ) {
+    }
+    
+    ngOnInit() {
+        let hrefValue = this.swhref;
+        console.log(hrefValue);
+        this.elementRef.nativeElement.setAttribute("href", hrefValue);
+    }
+    
+    
 }
 

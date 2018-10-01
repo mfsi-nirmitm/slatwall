@@ -3,6 +3,7 @@
 /*services return promises which can be handled uniquely based on success or failure by the controller*/
 
 import {Injectable,Inject} from "@angular/core";
+import {AppConfig} from "../../../../../../admin/client/src/app.provider";
 
 @Injectable()
 export class HibachiPathBuilder{
@@ -11,8 +12,10 @@ export class HibachiPathBuilder{
     public apiSubsystemName:string;
 
     //@ngInject
-    constructor(){
-
+    constructor(
+        
+    ){
+        this.setBasePartialsPath('/org/Hibachi/client/src/');
     }
 
     public setBaseURL (baseURL:string):void{
