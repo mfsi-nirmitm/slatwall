@@ -12,7 +12,7 @@ import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider,http
 import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "./app.provider";
 
-import { SwRbKey } from "../../../org/Hibachi/client/src/core/components/swrbkey";
+import { SWRBKEY } from "../../../org/Hibachi/client/src/core/components/swrbkey";
 import { SwDetail } from "../../../org/Hibachi/client/src/entity/components/swdetail";
 import { SwHref } from "../../../org/Hibachi/client/src/core/components/swhref";
 import { SwInclude } from "../../../org/Hibachi/client/src/core/components/swinclude";
@@ -46,7 +46,7 @@ import { SwInclude } from "../../../org/Hibachi/client/src/core/components/swinc
   ],
   declarations:[
       HeroDetailComponent,
-      SwRbKey,
+      SWRBKEY,
       SwDetail,
       SwHref,
       SwInclude
