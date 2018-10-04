@@ -76,7 +76,7 @@ import { RbKeyService } from "../services/rbkeyservice";
 
 export class SwRbKey implements OnInit {
         
-    @Input() private swrbkey:any;
+    @Input() private swRbkey:any;
     
     constructor(
         private rbkeyService : RbKeyService,
@@ -90,7 +90,7 @@ export class SwRbKey implements OnInit {
     }
     
     bindRBKey = function(){
-        let rbKeyValue = this.swrbkey;
+        let rbKeyValue = this.swRbkey;
         if(angular.isDefined(rbKeyValue) && angular.isString(rbKeyValue)){
             console.log(rbKeyValue);
             console.log(this.rbkeyService.getRBKey(rbKeyValue));
