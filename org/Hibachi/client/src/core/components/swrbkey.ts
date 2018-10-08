@@ -41,6 +41,7 @@ class SWRbKey{
 			scope:{
 				swRbkey:"="
 			},
+            template:``,
 			link: function(scope, element, attrs){
 				var rbKeyValue = scope.swRbkey;
                 console.log("rbkey directive angular js");

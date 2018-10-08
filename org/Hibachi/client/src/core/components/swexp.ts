@@ -37,9 +37,9 @@ class SWExp{
             scope:{
             //    swExp: "="
             },
-            //templateUrl:hibachiPathBuilder.buildPartialsPath(corePartialsPath)+"exp.html",
+            templateUrl:hibachiPathBuilder.buildPartialsPath(corePartialsPath)+"exp.html",
             //templateUrl: "/org/Hibachi/client/src/core/components/exp.html",
-            template: `<h1>This is Experimental</h1>`,
+            //template: `<h1>This is Experimental</h1>`,
             link: function(scope, element,attrs){
                 console.log("angularjs exp component");
             }
