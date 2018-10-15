@@ -76,16 +76,17 @@ import { SWScrollTrigger } from "./components/swscrolltrigger";
 import { SWTabGroup } from "./components/swtabgroup";
 import { SWTabContent } from "./components/swtabcontent";
 import { SWTooltip } from "./components/swtooltip";
-import { SWRbKey } from "./components/swrbkey";
+import { SWRbKey,SwRbKey } from "./components/swrbkey";
 import { SWOptions } from "./components/swoptions";
 import { SWSelection } from "./components/swselection";
 import { SWClickOutside } from "./components/swclickoutside";
 import { SWDirective } from "./components/swdirective";
 import { SWExportAction } from "./components/swexportaction";
-import { SWHref } from "./components/swhref";
+import { SWHref, SwHref } from "./components/swhref";
 import { SWProcessCaller } from "./components/swprocesscaller";
 import { SWSortable } from "./components/swsortable";
 import { SWOrderByControls } from "./components/sworderbycontrols";
+import { SWExp } from "./components/swexp";
 
 //modules
 import { alertmodule } from "../alert/alert.module";
@@ -95,7 +96,7 @@ import { DialogModule } from '../dialog/dialog.module';
 
 import { NgModule, Inject, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UpgradeModule, downgradeInjectable } from '@angular/upgrade/static';
+import { UpgradeModule, downgradeInjectable, downgradeComponent } from '@angular/upgrade/static';
 
 
 import { BaseObject } from "./model/baseobject";
@@ -355,8 +356,10 @@ var coremodule = angular.module('hibachi.core', [
     .directive('swNumbersOnly', SWNumbersOnly.Factory())
     .directive('swLoading', SWLoading.Factory())
     .directive('swScrollTrigger', SWScrollTrigger.Factory())
-    .directive('swRbkey', SWRbKey.Factory())
+    //.directive('swRbkey', SWRbKey.Factory())
+    .directive('swRbkey', downgradeComponent({ component: SwRbKey }) as angular.IDirectiveFactory)
     .directive('swOptions', SWOptions.Factory())
+    .directive('swExp', SWExp.Factory())
     .directive('swSelection', SWSelection.Factory())
     .directive('swTabGroup', SWTabGroup.Factory())
     .directive('swTabContent', SWTabContent.Factory())
@@ -365,6 +368,7 @@ var coremodule = angular.module('hibachi.core', [
     .directive('swDirective', SWDirective.Factory())
     .directive('swExportAction', SWExportAction.Factory())
     .directive('swHref', SWHref.Factory())
+    //.directive('swHref', downgradeComponent({ component: SwHref }) as angular.IDirectiveFactory)
     .directive('swProcessCaller', SWProcessCaller.Factory())
     .directive('sw:sortable', SWSortable.Factory())
     .directive('swOrderByControls', SWOrderByControls.Factory());

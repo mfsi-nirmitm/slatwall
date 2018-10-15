@@ -13,7 +13,7 @@ import {OtherWiseController} from "./controllers/otherwisecontroller";
 import {RouterController} from "./controllers/routercontroller";
 //directives
 import {SWDetailTabs} from "./components/swdetailtabs";
-import {SWDetail} from "./components/swdetail";
+import {SWDetail,SwDetail} from "./components/swdetail";
 import {SWList} from "./components/swlist";
 
 //modules
@@ -22,11 +22,18 @@ import {CoreModule} from "../core/core.module";
 
 import {NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {UpgradeModule,downgradeInjectable} from '@angular/upgrade/static';
+import {UpgradeModule,downgradeInjectable,downgradeComponent} from '@angular/upgrade/static';
 
 @NgModule({
-    declarations : [],
-    providers :[],
+    declarations : [
+    //    SwDetail
+    ],
+    providers :[
+        {
+            provide  : 'CoreEntityPartialsPath',
+            useValue : 'entity/components/'
+        }
+    ],
     imports :[
         CoreModule,
         CommonModule,
@@ -46,9 +53,13 @@ var entitymodule = angular.module('hibachi.entity',['ngRoute',coremodule.name])
 .config(['$routeProvider','$injector','$locationProvider','appConfig',
 ($routeProvider,$injector,$locationProvider,appConfig)=>{
      //detect if we are in hashbang mode
+    console.log("entity module angular js");
      var vars:any = {};
+    console.log(window.location);
+    console.log(window.location.href);
      var parts:any = window.location.href.replace(/[?&]+([^=&]+)#([^/]*)/gi, (m:any,key:string,value:string):any=> {
         vars[key] = value;
+        console.log(key,value);
      });
 
      if(vars.ng){
@@ -56,12 +67,16 @@ var entitymodule = angular.module('hibachi.entity',['ngRoute',coremodule.name])
      }
     
     var snakeToCapitalCase = (s)=>{
+        console.log(s);
+        console.log(s.charAt(0).toUpperCase() + s.replace(/(\-\w)/g, function(m){return m[1].toUpperCase();}).slice(1));
         return s.charAt(0).toUpperCase() + s.replace(/(\-\w)/g, function(m){return m[1].toUpperCase();}).slice(1);
     }
 
     $routeProvider.when('/entity/:entityName/', {
          template: function(params){
+             console.log(params);
              var entityDirectiveExists = $injector.has('sw'+snakeToCapitalCase(params.entityName)+'ListDirective');
+             console.log(entityDirectiveExists);
              if(entityDirectiveExists){
                  return '<sw-'+params.entityName.toLowerCase()+'-list></sw-'+params.entityName.toLowerCase()+'-list>';
              }else{
@@ -72,11 +87,13 @@ var entitymodule = angular.module('hibachi.entity',['ngRoute',coremodule.name])
      }).when('/entity/:entityName/:entityID', {
          template: function(params){
              
-             
+             console.log(params);
              var entityDirectiveExists = $injector.has('sw'+snakeToCapitalCase(params.entityName)+'DetailDirective');
+             console.log(entityDirectiveExists);
              if(entityDirectiveExists){
                  return '<sw-'+params.entityName.toLowerCase()+'-detail></sw-'+params.entityName.toLowerCase()+'-detail>';
              }else{
+                 console.log("return swdetail component");
                  return '<sw-detail></sw-detail>';
              }
          },
@@ -96,7 +113,8 @@ var entitymodule = angular.module('hibachi.entity',['ngRoute',coremodule.name])
 //filters
 
 //directives
-.directive('swDetail',SWDetail.Factory())
+//.directive('swDetail',SWDetail.Factory())
+.directive('swDetail', downgradeComponent({ component: SwDetail }) as angular.IDirectiveFactory)
 .directive('swDetailTabs',SWDetailTabs.Factory())
 .directive('swList',SWList.Factory())
 //components

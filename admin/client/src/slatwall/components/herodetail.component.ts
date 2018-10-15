@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SWRbKey } from '../../../../../org/Hibachi/client/src/core/components/swrbkey';
 
 @Component({
   selector: 'hero-detail',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
     <div sw-rbkey [swRbkey]="'entity.Product.option.select'"><label>id: </label>1</div>
   `
 })
-export class HeroDetailComponent { }
+export class HeroDetailComponent  {
+
+}

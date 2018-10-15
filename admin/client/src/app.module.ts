@@ -8,11 +8,15 @@ import {slatwalladminmodule} from './slatwall/slatwalladmin.module';
 
 import {CoreModule,coremodule}  from  "../../../org/Hibachi/client/src/core/core.module";
 import {LoggerModule} from "../../../org/Hibachi/client/src/logger/logger.module";
-import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider,httpProvider,injectorProvider,windowProvider,rootScopeProvider,locationProvider,anchorScrollProvider } from "./ajs-upgraded-providers";  
+import { parseProvider,logProvider,filterProvider,timeoutProvider,qProvider,httpProvider,injectorProvider,windowProvider,rootScopeProvider,locationProvider,anchorScrollProvider,routeParamsProvider } from "./ajs-upgraded-providers";  
 import {SlatwallAdminModule} from "./slatwall/slatwalladmin.module";
 import {AppProvider,AppConfig,ResourceBundles,AttributeMetaData} from "./app.provider";
 
-import { SwRbKey } from "../../../org/Hibachi/client/src/core/components/swrbkey";
+import { SWRBKEY,SwRbKey } from "../../../org/Hibachi/client/src/core/components/swrbkey";
+import { SwDetail } from "../../../org/Hibachi/client/src/entity/components/swdetail";
+import { SwHref } from "../../../org/Hibachi/client/src/core/components/swhref";
+import { SwInclude } from "../../../org/Hibachi/client/src/core/components/swinclude";
+import { SWEXP } from "../../../org/Hibachi/client/src/core/components/swexp";
 
 
 @NgModule({
@@ -30,7 +34,8 @@ import { SwRbKey } from "../../../org/Hibachi/client/src/core/components/swrbkey
     windowProvider,
     rootScopeProvider,
     locationProvider,
-    anchorScrollProvider
+    anchorScrollProvider,
+    routeParamsProvider
   ],
   imports: [
     HttpClientModule,
@@ -42,10 +47,15 @@ import { SwRbKey } from "../../../org/Hibachi/client/src/core/components/swrbkey
   ],
   declarations:[
       HeroDetailComponent,
-      SwRbKey
+      SwRbKey,
+      SwDetail,
+      SwHref,
+      SwInclude,
+      SWEXP
   ],
   entryComponents: [
-    HeroDetailComponent
+    HeroDetailComponent,
+      SwDetail
   ]
 })
 export class AppModule { 

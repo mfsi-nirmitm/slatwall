@@ -56,6 +56,10 @@ export function anchorScrollFactory(i:any) {
     return i.get('$anchorScroll');
 }
 
+export function routeParamsFactory(i:any) {
+    return i.get('$routeParams');    
+}
+
 
 // define angular factory provider 
 export const parseProvider = {
@@ -122,4 +126,10 @@ export const anchorScrollProvider = {
     provide    : "$anchorScroll",
     useFactory : anchorScrollFactory,
     deps       : ["$injector"]    
+};
+
+export const routeParamsProvider = {
+    provide    : "$routeParams",
+    useFactory : routeParamsFactory,
+    deps       : ["$injector"]  
 };
