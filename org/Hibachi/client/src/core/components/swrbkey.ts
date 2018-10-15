@@ -85,7 +85,7 @@ export class SwRbKey implements OnInit {
     ) {
         
     }
-
+  
     ngOnInit() {
         this.bindRBKey();
     }
@@ -93,8 +93,6 @@ export class SwRbKey implements OnInit {
     bindRBKey = function(){
         let rbKeyValue = this.swRbkey;
         if(angular.isDefined(rbKeyValue) && angular.isString(rbKeyValue)){
-            console.log(rbKeyValue);
-            console.log(this.rbkeyService.getRBKey(rbKeyValue));
             this.el.nativeElement.innerHTML = this.rbkeyService.getRBKey(rbKeyValue);
         }
     }
