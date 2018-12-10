@@ -8,7 +8,7 @@
 	        <sw-tooltip class="j-tool-tip-item"
 	              
 	              [text]="swPropertyDisplay.hint"
-	              [position]="'right'"
+	              [position]="'top'"
 	                >
 	            <i class="fa fa-question-circle"></i>
 	        </sw-tooltip>
@@ -16,10 +16,10 @@
     </label>
     <div data-ng-class="{ 's-form-input' : !swPropertyDisplay.inListingDisplay, 's-input-group' : swPropertyDisplay.inListingDisplay, 's-edit' : swPropertyDisplay.edited }">
         <!-- Model-->
-        <span sw-form-field ng-show="swPropertyDisplay.editing"
-            data-property-display="swfPropertyDisplay.propertyDisplay"
+        <sw-form-field-upgraded [hidden]="!swPropertyDisplay.editing"
+            [propertydisplay]="swPropertyDisplay"
             >
-        </span>
+        </sw-form-field-upgraded>
 
         <!-- Save Button -->
         <a  class="btn btn-xs btn-success s-action-btn" 

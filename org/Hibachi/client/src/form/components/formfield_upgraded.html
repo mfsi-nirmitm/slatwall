@@ -1,0 +1,106 @@
+<span *swinit="labelText.replace(':','') as labelText"  ></span>
+<!-- 
+<sw-input ng-if="fieldTypes.indexOf(swFormField.fieldType.toLowerCase()) >= 0" data-property-display="swFormField"></sw-input>
+ -->
+<span [ngSwitch]="fieldType" >
+	<!-- 
+	<sw-form-field-search-select data-property-display="swFormField" ng-switch-when="search-select"></sw-form-field-search-select>
+	 -->
+<!-- 
+	<span *ngSwitchCase="'select'">
+		<select type="{{swFormField.fieldType}}" class="form-control"
+		    		 ng-model="swFormField.object.data['selected'+swFormField.propertyIdentifier]"
+		    		 ng-disabled="!swFormField.editable"
+		    		 ng-show="swFormField.edit"
+		    		 ng-options="propertyDisplayOption as propertyDisplayOption.name for propertyDisplayOption in swFormField.options track by propertyDisplayOption.value"
+					 ng-change="swFormField.formFieldChanged(swFormField.object.data['selected'+swFormField.propertyIdentifier])"	 
+		>
+		</select>
+
+		<input style="display:none"
+				type="text"
+				name="{{swFormField.object.data[swFormField.propertyIdentifier].$$getIDName()}}"
+				ng-if="swFormField.selectType === 'object'"
+				ng-model="swFormField.object.data[swFormField.propertyIdentifier].data[swFormField.object.data[swFormField.propertyIdentifier].$$getIDName()]"
+		/>
+		<input style="display:none"
+				type="text"
+				name="{{swFormField.propertyIdentifier}}"
+				ng-if="swFormField.selectType === 'string'"
+				ng-model="swFormField.object.data[swFormField.propertyIdentifier]"
+		/>
+
+	</span>
+ -->
+ 
+	<span *ngSwitchCase="'yesno'">
+		<span *ngIf="selectedradioformname" >
+			<div class="radio" class="display:inline-block;" *ngFor="let option of options; trackBy: option?.value" >
+				<input type="radio" name="{{'selected'+ object.metaData.className + propertyIdentifier+selectedradioformname}}" id="{{object.metaData.className+'.'+ propertyIdentifier+ selectedradioformname + $index}}"
+						[(ngModel)]="selected"
+						[hidden]="!edit"
+						[value]="option"
+						(click)="formfieldchanged(selected)"
+				>
+				<label for="{{object.metaData.className+'.'+ propertyIdentifier + selectedradioformname + $index}}">
+					<span [textContent]="option.name"></span>
+				</label>
+			</div>
+		</span>
+
+		<input style="display:none"	type="text" *ngIf="selectedradioformname && propertyIdentifier"
+				[(ngModel)]="object.data[propertyIdentifier]"
+				name="{{propertyIdentifier}}"
+		/>
+	</span>
+ 
+ <!-- 
+	<sw-form-field-file ng-switch-when="file" 
+						data-property-display="swFormField">
+	</sw-form-field-file>
+ -->
+<!-- 
+	<textarea ng-switch-when="textarea" class="{{swFormField.class}}"  id="{{swFormField.name}}TextArea" ng-model="swFormField.object[swFormField.name]" name="{{swFormField.name}}"></textarea>
+ -->
+<!-- 	
+	<span ng-switch-when="checkbox">
+		<input type="checkbox" ng-model="swFormField.object.data[swFormField.propertyIdentifier]" class="{{swFormField.class}}">
+		<input style="display:none"	type="text"
+			ng-model="swFormField.object.data[swFormField.propertyIdentifier]"
+			name="{{swFormField.name}}"
+		/>
+	</span>
+ -->
+ <!-- 
+	<select ng-switch-when="multiselect" class="{{swFormField.class}}" name="{{swFormField.name}}" multiple="true">
+			<option value="{{option.value}}" ng-repeat="option in swFormField.optionValues" ng-if="option.selected" selected>{{option.name}}</option>
+			<option value="{{option.value}}" ng-repeat="option in swFormField.optionValues" ng-if="!option.selected">{{option.name}}</option>
+	</select>
+ -->
+<!-- 
+	<div ng-switch-when="radiogroup" name="{{swFormField.name}}">
+		<div ng-repeat="option in optionValues" class="{{swFormField.class}}">
+			<label ng-bind="option.name" ng-if="option.name" class="control-label"></label>
+			<input type="radio" id="{{option.name}}_{{option.value}}" name="{{swFormField.name}}" class="radio"/>
+		</div>
+	</div>
+ -->
+<!-- 
+	<div ng-switch-when="checkboxgroup" name="{{swFormField.name}}">
+		<div ng-repeat="option in optionValues" class="{{swFormField.class}}">
+			<label ng-bind="option.name" ng-if="option.name" class="{{swFormField.class}}"></label>
+			<input type="checkbox" id="{{option.name}}_{{option.value}}" name="{{swFormField.name}}"/>
+		</div>
+	</div>
+ -->
+
+	<!--- needs to be replaced with an action caller --->
+<!-- 
+	<div ng-switch-when="submit" name="submit">
+		<input type="submit" class="btn" name="submit" text="{{swFormField.name}}" value="{{swFormField.name}}" ng-click="swfPropertyDisplayController.submit();"></input>
+	</div>
+ -->
+</span>
+
+
+
