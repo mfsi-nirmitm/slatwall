@@ -15,12 +15,17 @@ class SWErrorDisplayController {
     public property:string;
     public propertyIdentifier:string;
     public name:string;
+    public form;
     //@ngInject
    constructor(public $injector){
        this.$injector = $injector;
    }
    public $onInit(){
-       
+       var objectKeys = Object.keys;
+       console.log(this.form);
+       this.form["workflowName"].$error = {"hahaha":true};
+       console.log(objectKeys(this.form["workflowName"].$error)[0]);
+       debugger;
        /**
         if a css error class was passed to propertyDisplay, attach to form
         which will apply it to the dynamically generateddiv that contains
@@ -32,15 +37,18 @@ class SWErrorDisplayController {
        
        var bindToControllerProps = this.$injector.get('swErrorDisplayDirective')[0].bindToController;
 		for(var i in bindToControllerProps){
-
+            debugger;
 			if(!this[i] && i !== 'name'){
                 
 				if(!this[i] && this.swPropertyDisplay && this.swPropertyDisplay[i]){
-					this[i] = this.swPropertyDisplay[i]
+					this[i] = this.swPropertyDisplay[i];
+                    debugger;
 				}else if(!this[i] && this.swfPropertyDisplay && this.swfPropertyDisplay[i]){
-					this[i] = this.swfPropertyDisplay[i]
+					this[i] = this.swfPropertyDisplay[i];
+                    debugger;
 				}else if(!this[i] && this.swForm && this.swForm[i]){
 					this[i] = this.swForm[i];
+                    debugger;
 				}
 			}
 		}
@@ -76,6 +84,7 @@ class SWErrorDisplay implements ng.IDirective {
     // @ngInject
     constructor( public coreFormPartialsPath, public hibachiPathBuilder) {
         this.templateUrl = hibachiPathBuilder.buildPartialsPath(this.coreFormPartialsPath) + "errordisplay.html";
+        console.log(this.templateUrl);
     }
 
     public static Factory(){
@@ -92,8 +101,62 @@ class SWErrorDisplay implements ng.IDirective {
 		];
 		return directive;
 	}
+
 }
 export{
     SWErrorDisplay,
     SWErrorDisplayController
+}
+
+
+
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+    selector   : 'sw-error-display',
+    templateUrl: '/org/Hibachi/client/src/form/components/errordisplay.html'    
+})
+export class SwErrorDisplay implements OnInit {
+    
+    @Input() private propertyidentifier;
+    @Input() private form;
+    private property;
+    private name;
+    private objectKeys;
+
+    ngOnInit() {
+               
+        /*var bindToControllerProps = this.$injector.get('swErrorDisplayDirective')[0].bindToController;
+        for(var i in bindToControllerProps){
+            debugger;
+            if(!this[i] && i !== 'name'){
+                
+                if(!this[i] && this.swPropertyDisplay && this.swPropertyDisplay[i]){
+                    this[i] = this.swPropertyDisplay[i];
+                    debugger;
+                }else if(!this[i] && this.swfPropertyDisplay && this.swfPropertyDisplay[i]){
+                    this[i] = this.swfPropertyDisplay[i];
+                    debugger;
+                }else if(!this[i] && this.swForm && this.swForm[i]){
+                    this[i] = this.swForm[i];
+                    debugger;
+                }
+            }
+        } */
+
+        
+        console.log(this.form);
+        debugger;
+        this.property = this.property || this.propertyidentifier;
+        this.propertyidentifier = this.propertyidentifier || this.property;
+        if(!this.name && this.property){
+            this.name = this.property;
+        }
+        
+        this.objectKeys = Object.keys;
+        console.log(this.form);
+        //this.form["workflowName"].$error = {"hahaha":true};
+        //console.log(this.objectKeys(this.form[this.name].$error)[0]);
+        debugger;
+    }
 }

@@ -16,11 +16,16 @@
     </label>
     <div data-ng-class="{ 's-form-input' : !swPropertyDisplay.inListingDisplay, 's-input-group' : swPropertyDisplay.inListingDisplay, 's-edit' : swPropertyDisplay.edited }">
         <!-- Model-->
+<!--     
         <sw-form-field-upgraded [hidden]="!swPropertyDisplay.editing"
             [propertydisplay]="swPropertyDisplay"
             >
         </sw-form-field-upgraded>
-
+ -->    
+ 
+        <span sw-form-field ng-show="swPropertyDisplay.editing"
+            data-property-display="swfPropertyDisplay.propertyDisplay"></span>
+  
         <!-- Save Button -->
         <a  class="btn btn-xs btn-success s-action-btn" 
             data-ng-show="!swPropertyDisplay.saved && swPropertyDisplay.edited && swPropertyDisplay.showSave && !swPropertyDisplay.pageRecord.edited" 
@@ -54,7 +59,12 @@
             <!-- property value -->
         </p>
     </div>
-    <sw-error-display
+    <!-- 
+    <sw-error-display [form]="swPropertyDisplay.form" [propertyidentifier]="swPropertyDisplay.propertyIdentifier"
     >
     </sw-error-display>
+	 -->
+	 <sw-error-dispay
+	 >
+	 </sw-error-dispay>
 </div>

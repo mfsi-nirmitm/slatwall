@@ -28,12 +28,15 @@ class SWFormRegistrar implements ng.IDirective {
                 isDirty:"=?"
             },
 			link: function(scope, element, attrs, formController,transclude){
+                debugger;
 				/*add form info at the form level*/
                 scope.$watch(()=>{return formController[0]},()=>{
                     formController[1].formCtrl = formController[0];
+                    debugger;
                 })
 				
 
+                debugger;
 				formController[0].$$swFormInfo={
 					object:scope.object,
 					context:scope.context || 'save',
@@ -79,3 +82,29 @@ export{
 }
 // 	angular.module('slatwalladmin').directive('swFormRegistrar',[ 'formService', 'partialsPath', (formService, partialsPath) => new swFormRegistrar(formService, partialsPath)]);
 // }
+
+
+import { Directive, OnInit, Input } from '@angular/core';
+import { FormService } from '../../core/services/formservice';
+
+@Directive({
+    selector : 'sw-form-registrar-upgraded'
+})
+export class SwFormRegistrar implements OnInit {
+    
+    @Input() public object;
+    @Input() public context;
+    @Input() public name;
+    @Input() public isDirty;
+        
+    constructor(
+        private formService: FormService
+    ) {
+        
+    }
+    
+    ngOnInit() {
+       
+    }
+    
+}

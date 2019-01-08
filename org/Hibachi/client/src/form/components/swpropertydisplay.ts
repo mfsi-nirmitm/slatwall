@@ -87,10 +87,12 @@ class SWPropertyDisplayController {
 	}
 
     public $onInit=()=>{
+        debugger;
         var bindToControllerProps = this.$injector.get('swPropertyDisplayDirective')[0].bindToController;
         for(var i in bindToControllerProps){
-
+            //debugger;
 			if(!this[i] && this.swForm && this.swForm[i]){
+                //debugger;
 				this[i] = this.swForm[i];
 			}
 		}
@@ -189,9 +191,10 @@ class SWPropertyDisplayController {
 
 		/** handle options */
 		if (this.options && angular.isString(this.options)){
+            //debugger;
 			let optionsArray = [];
 			optionsArray = this.options.toString().split(",");
-
+            debugger;
 			angular.forEach(optionsArray, (o)=>{
 				let newOption:any = {
 					name:"",
@@ -303,7 +306,7 @@ class SWPropertyDisplay implements ng.IDirective{
 
         //swfproperty scope
 
-        name: "@?",
+        name: "@?",//swform
         errorName: "@?",
         class: "@?",
         edit: "@?",
@@ -316,16 +319,16 @@ class SWPropertyDisplay implements ng.IDirective{
         labelText: "@?",
         labelClass: "@?",
         errorText: "@?",
-        errorClass: "@?",
+        errorClass: "@?",//swform
         formTemplate: "@?",
-        eventAnnouncers:"@",
+        eventAnnouncers:"@",//swform
         hideErrors:'=?',
         value:"@?",
 
         //swpropertyscope
 
         property:"@?",
-        object:"=?",
+        object:"=?",//swform
         editable:"=?",
         editing:"=?",
         isHidden:"=?",
@@ -334,7 +337,7 @@ class SWPropertyDisplay implements ng.IDirective{
         options:"=?",
         optionsArguments:"=?",
         eagerLoadOptions:"=?",
-        isDirty:"=?",
+        isDirty:"=?",//swform
         onChangeCallback:"&?onChange",
         onChangeEvent:"@?",
         saveCallback:"&?",
@@ -353,10 +356,10 @@ class SWPropertyDisplay implements ng.IDirective{
         showSave:"=?",
         placeholderText:"@",
         placeholderRbKey:"@",
-        inputAttributes:"@?",
+        inputAttributes:"@?",//swform
         optionValues:"=?",
-        eventListeners:"=?",
-        context:"@?"
+        eventListeners:"=?",//swform
+        context:"@?"//swform
     };
     public controller=SWPropertyDisplayController;
     public controllerAs="swPropertyDisplay";
@@ -373,6 +376,7 @@ class SWPropertyDisplay implements ng.IDirective{
 
     ){
         this.templateUrl = this.hibachiPathBuilder.buildPartialsPath(this.coreFormPartialsPath) + swpropertyPartialPath;
+        console.log(this.hibachiPathBuilder.buildPartialsPath(this.coreFormPartialsPath) + swpropertyPartialPath);
     }
 
     public static Factory(swpropertyClass,swpropertyPartialPath?:string){
@@ -397,9 +401,13 @@ class SWPropertyDisplay implements ng.IDirective{
 
 
     public link:ng.IDirectiveLinkFn = ($scope:any, element: ng.IAugmentedJQuery, attrs:any, formController: any) =>{
-
+        //debugger;
         $scope.frmController = formController;
+        //debugger;
         $scope.swfPropertyDisplay = $scope.swPropertyDisplay;
+        //debugger;
+        console.log($scope.swPropertyDisplay.fieldType);
+        console.log($scope.swfPropertyDisplay)
 
         if(angular.isDefined(attrs.onChange)){
             $scope.swPropertyDisplay.hasOnChangeCallback = true;
@@ -416,23 +424,29 @@ class SWPropertyDisplay implements ng.IDirective{
         if(angular.isDefined($scope.swPropertyDisplay.inListingDisplay) && $scope.swPropertyDisplay.inListingDisplay){
 
             var currentScope = this.scopeService.getRootParentScope($scope, "pageRecord");
+            debugger;
             if(angular.isDefined(currentScope["pageRecord"])){
                 $scope.swPropertyDisplay.pageRecord = currentScope["pageRecord"];
+                debugger;
             }
 
             var currentScope = this.scopeService.getRootParentScope($scope, "pageRecordKey");
+            debugger;
             if(angular.isDefined(currentScope["pageRecordKey"])){
                 $scope.swPropertyDisplay.pageRecordIndex = currentScope["pageRecordKey"];
+                debugger;
             }
 
             var currentScope = this.scopeService.getRootParentScope($scope, "swListingDisplay");
+            debugger;
             if(angular.isDefined(currentScope["swListingDisplay"])){
                 $scope.swPropertyDisplay.listingID = currentScope["swListingDisplay"].tableID;
+                debugger;
             }
         }
 
         if(angular.isDefined($scope.swPropertyDisplay.inModal) && $scope.swPropertyDisplay.inModal){
-
+            debugger;
             var modalScope = this.scopeService.getRootParentScope($scope, "swModalLauncher");
             $scope.swPropertyDisplay.modalName = modalScope.swModalLauncher.modalName;
 
@@ -446,4 +460,24 @@ class SWPropertyDisplay implements ng.IDirective{
 export{
     SWPropertyDisplay,
     SWPropertyDisplayController
+}
+
+
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+    selector   : 'sw-property-display-upgraded',
+    templateUrl: '/org/Hibachi/client/src/form/components/propertydisplay.html'
+})
+export class SwPropertyDisplay implements OnInit {
+    
+
+            
+    constructor() {
+        
+    }
+    
+    ngOnInit() {
+        
+    }
 }

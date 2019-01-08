@@ -15,7 +15,7 @@ import {SWValidationMinValue} from "./components/swvalidationminvalue";
 import {SWValidationNeq} from "./components/swvalidationneq";
 import {SWValidationNumeric} from "./components/swvalidationnumeric";
 import {SWValidationRegex} from "./components/swvalidationregex";
-import {SWValidationRequired} from "./components/swvalidationrequired";
+import {SWValidationRequired, SwValidationRequired} from "./components/swvalidationrequired";
 import {SWValidationUnique} from "./components/swvalidationunique";
 import {SWValidationUniqueOrNull} from "./components/swvalidationuniqueornull";
 //services
@@ -31,7 +31,9 @@ import {UpgradeModule, downgradeInjectable} from '@angular/upgrade/static';
 
 
 @NgModule({
-	declarations : [],
+	declarations : [
+        //SwValidationRequired
+    ],
 	providers : [
         ValidationService
     ],
@@ -39,7 +41,10 @@ import {UpgradeModule, downgradeInjectable} from '@angular/upgrade/static';
 		CoreModule,
 		CommonModule,
 		UpgradeModule
-	]
+	],
+    exports : [
+//        SwValidationRequired
+    ]
 })
 
 export class ValidationModule{

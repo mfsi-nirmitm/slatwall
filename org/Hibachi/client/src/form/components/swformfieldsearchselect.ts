@@ -36,6 +36,7 @@ class SWFormFieldSearchSelect{
 				propertyDisplay:"="
 			},
 			link:function(scope,element,attr,formController){
+                debugger;
 				//set up selectionOptions
 				scope.selectionOptions = {
 					value:[],

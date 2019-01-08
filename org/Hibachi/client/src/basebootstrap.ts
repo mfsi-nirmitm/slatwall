@@ -35,7 +35,7 @@ export class BaseBootStrapper{
             baseURL += '/';
         }
 
-/*
+
        return this.getInstantiationKey(baseURL).then((instantiationKey:string)=>{
             this.instantiationKey = instantiationKey;
             var invalidCache = [];
@@ -65,8 +65,8 @@ export class BaseBootStrapper{
             return this.getData(invalidCache);
         });
         
-*/
-           return this.getInstantiationKey(baseURL).then((instantiationKey:string)=>{
+
+/*           return this.getInstantiationKey(baseURL).then((instantiationKey:string)=>{
                 this.instantiationKey = instantiationKey;
                 var invalidCache = [];
                 
@@ -144,8 +144,7 @@ export class BaseBootStrapper{
                 });
                 
             });
-      }])
-
+*/
 
     }
     

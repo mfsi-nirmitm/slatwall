@@ -1,0 +1,33 @@
+<input 
+	type="text" 
+	class="form-control input-xs" 
+	[formControl]="control"
+	[(ngModel)]="value" 
+	[disabled]="editable === false" 
+	[hidden]="!edit" 
+	[ngClass]="{'form-control':inListingDisplay, 'input-xs':inListingDisplay}"
+	name="propertyIdentifier"
+	placeholder="placeholder"
+	id = "name"
+	style = "style"
+	swvalidationrequired [value_required]="'true'" 
+	/>
+	<div *ngIf="control.invalid" style="color: red">Required</div>
+	<!-- 
+            <a class="s-remove-change"
+                (click)="clear()"
+                *ngIf="this.edited && this.edit">
+                    <i class="fa fa-remove"></i>
+            </a>
+
+            <!- - Revert Button - ->
+            <button class="btn btn-xs btn-default s-revert-btn"
+                    [hidden]="!showRevert"
+                    (click)="revert()"
+                    [data-toggle]="'popover'"
+                    [data-trigger]="'hover'"
+                    [data-content]="revertText"
+                    [data-original-title]=""
+                    title="">
+                <i class="fa fa-refresh"></i>
+            </button>  -->

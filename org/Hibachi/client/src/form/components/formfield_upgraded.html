@@ -2,40 +2,54 @@
 <!-- 
 <sw-input ng-if="fieldTypes.indexOf(swFormField.fieldType.toLowerCase()) >= 0" data-property-display="swFormField"></sw-input>
  -->
+ 
+<sw-input-upgraded  
+	*ngIf="fieldtypes.indexOf(fieldType.toLowerCase()) >= 0"
+	[propertyIdentifier] = "propertyIdentifier"
+	[name] = "name"
+	[class] = "class"
+	[object] = "object"
+	[label] = "label"
+	[labelText] = "labelText"
+	[propertyDisplayID] = "propertyDisplayID"
+	[edit] = "edit"
+	[title] = "title"
+	[fieldType] = "fieldType"
+	[context] = "context"
+></sw-input-upgraded>
 <span [ngSwitch]="fieldType" >
 	<!-- 
 	<sw-form-field-search-select data-property-display="swFormField" ng-switch-when="search-select"></sw-form-field-search-select>
 	 -->
-<!-- 
+
 	<span *ngSwitchCase="'select'">
-		<select type="{{swFormField.fieldType}}" class="form-control"
-		    		 ng-model="swFormField.object.data['selected'+swFormField.propertyIdentifier]"
-		    		 ng-disabled="!swFormField.editable"
-		    		 ng-show="swFormField.edit"
-		    		 ng-options="propertyDisplayOption as propertyDisplayOption.name for propertyDisplayOption in swFormField.options track by propertyDisplayOption.value"
-					 ng-change="swFormField.formFieldChanged(swFormField.object.data['selected'+swFormField.propertyIdentifier])"	 
+		<select  class="form-control"
+		    		 [(ngModel)]="object.data['selected'+propertyIdentifier]"
+		    		 [disabled]="editable"
+		    		 [hidden]="!edit"
+					 (ngModelChange)="formFieldChanged(object.data['selected'+propertyIdentifier])"	 
 		>
+			<option *ngFor="let propertyDisplayOption of options;trackBy: propertyDisplayOption" [attr.selected]="propertyDisplayOption === object.data['selected'+propertyIdentifier]" >{{propertyDisplayOption?.value}}</option>
 		</select>
 
 		<input style="display:none"
 				type="text"
-				name="{{swFormField.object.data[swFormField.propertyIdentifier].$$getIDName()}}"
-				ng-if="swFormField.selectType === 'object'"
-				ng-model="swFormField.object.data[swFormField.propertyIdentifier].data[swFormField.object.data[swFormField.propertyIdentifier].$$getIDName()]"
+				[name]="object.data[propertyIdentifier].$$getIDName()"
+				*ngIf="selectType === 'object'"
+				[(ngModel)]="object.data[propertyIdentifier].data[object.data[propertyIdentifier].$$getIDName()]"
 		/>
 		<input style="display:none"
 				type="text"
-				name="{{swFormField.propertyIdentifier}}"
-				ng-if="swFormField.selectType === 'string'"
-				ng-model="swFormField.object.data[swFormField.propertyIdentifier]"
+				[name]="propertyIdentifier"
+				*ngIf="selectType === 'string'"
+				[(ngModel)]="object.data[propertyIdentifier]"
 		/>
 
 	</span>
- -->
- 
+  
 	<span *ngSwitchCase="'yesno'">
 		<span *ngIf="selectedradioformname" >
-			<div class="radio" class="display:inline-block;" *ngFor="let option of options; trackBy: option?.value" >
+			<div class="radio" style="display:inline-block;" *ngFor="let option of options; trackBy: option?.value" >
 				<input type="radio" name="{{'selected'+ object.metaData.className + propertyIdentifier+selectedradioformname}}" id="{{object.metaData.className+'.'+ propertyIdentifier+ selectedradioformname + $index}}"
 						[(ngModel)]="selected"
 						[hidden]="!edit"

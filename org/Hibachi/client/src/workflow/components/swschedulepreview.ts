@@ -21,6 +21,7 @@ class SWSchedulePreview implements ng.IDirective{
         public workflowPartialsPath,
         public hibachiPathBuilder
     ){
+        debugger;
         this.templateUrl = this.hibachiPathBuilder.buildPartialsPath(this.workflowPartialsPath) + "schedulepreview.html";
     }
 

@@ -28,6 +28,7 @@ class SWWorkflowConditionGroupItem{
 
 			templateUrl:hibachiPathBuilder.buildPartialsPath(workflowPartialsPath)+"workflowconditiongroupitem.html",
 			link: function(scope:any, element,attrs){
+                debugger;
 			}
 		};
 	}

@@ -1,3 +1,5 @@
+<p>First this is here</p>
+<p>{{entityName+'.'+detailTab.tabName.toLowerCase()}}</p>
 <sw-form 	ng-name="{{entityName+'.'+detailTab.tabName.toLowerCase()}}" 
 			data-object="workflow"
 >
@@ -6,3 +8,7 @@
 	>
 	</span>
 </sw-form>
+
+<sw-form-upgraded [name]="entityName+'.'+detailTab.tabName.toLowerCase()" [object]="'workflow'" >
+
+</sw-form-upgraded>

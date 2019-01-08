@@ -1,6 +1,7 @@
 import {NgModule, Injectable} from '@angular/core';
 
 import { HttpClientModule } from "@angular/common/http";
+//import { FormsModule } from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {UpgradeModule,downgradeInjectable} from '@angular/upgrade/static';
 import {slatwalladminmodule} from './slatwall/slatwalladmin.module';
@@ -36,6 +37,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
   imports: [
     HttpClientModule,
     BrowserModule,
+//    FormsModule,
     UpgradeModule,
     ModalModule.forRoot(),
     CoreModule,

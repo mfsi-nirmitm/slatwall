@@ -1,0 +1,17 @@
+
+<div>test1 upgraded</div>
+<!-- 
+<div  ng-if="swForm.object && swForm.isObject()">
+    <ng-form name='{{swForm.name}}' {{eventAnnouncers}}>
+		<p> test2</p>  		
+    	<sw-form-registrar data-name="{{swForm.name}}" data-context="{{swForm.context}}" data-object="swForm.object" data-is-dirty="swForm.isDirty" ng-transclude></sw-form-registrar>    	
+    </ng-form>
+</div>
+ -->
+
+ <div *ngIf="object && isObject()" >
+	<form name="{{name}}"  >
+		
+	</form> 
+ </div>
+ 

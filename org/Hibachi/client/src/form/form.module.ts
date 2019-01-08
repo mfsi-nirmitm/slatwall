@@ -6,7 +6,7 @@ import {coremodule} from "../core/core.module";
 import {CoreModule} from "../core/core.module";
 
 import {NgModule} from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {UpgradeModule,downgradeInjectable, downgradeComponent} from '@angular/upgrade/static';
 
@@ -18,9 +18,9 @@ import {FileService} from "./services/fileservice";
 //  components
 
 //form
-import {SWInput} from "./components/swinput";
+import {SWInput, SwInput} from "./components/swinput";
 import {SWFFormField} from "./components/swfformfield";
-import {SWForm} from "./components/swform";
+import {SWForm, SwForm} from "./components/swform";
 import {SWFForm} from "./components/swfform";
 import {SWFFileInput} from "./components/swffileinput";
 import {SWFormField , SwFormField} from "./components/swformfield";
@@ -28,15 +28,21 @@ import {SWFormFieldFile} from "./components/swformfieldfile";
 import {SWFormFieldJson} from "./components/swformfieldjson";
 import {SWFormFieldSearchSelect} from "./components/swformfieldsearchselect";
 import {SWFormRegistrar} from "./components/swformregistrar";
-import {SWErrorDisplay} from "./components/swerrordisplay";
+import {SWErrorDisplay, SwErrorDisplay} from "./components/swerrordisplay";
 import {SWAddressForm} from "./components/swaddressform";
 import {SWPropertyDisplay} from "./components/swpropertydisplay";
 import {SWFPropertyDisplay} from "./components/swfpropertydisplay";
 import {SWFormSubscriber} from "./components/swformsubscriber";
+import {SwValidationRequired} from "../validation/components/swvalidationrequired";
+
 
 @NgModule({
     declarations: [
-        SwFormField
+        SwFormField,
+        SwInput,
+        SwValidationRequired,
+        SwForm
+//        SwErrorDisplay
     ],
     providers: [
         FileService
@@ -45,13 +51,17 @@ import {SWFormSubscriber} from "./components/swformsubscriber";
         FormsModule,
         CommonModule,
         UpgradeModule,
-        CoreModule
+        CoreModule,
+        ReactiveFormsModule
     ],
     exports: [
         SwFormField
     ],
     entryComponents: [
+        SwForm,
         SwFormField
+        
+//        SwErrorDisplay
     ]  
 })
 
@@ -72,6 +82,7 @@ var formmodule = angular.module('hibachi.form',['angularjs-datetime-picker',core
 .directive('swInput',SWInput.Factory())
 .directive('swfFormField',SWFFormField.Factory())
 .directive('swForm',SWForm.Factory())
+.directive('swFormUpgraded', downgradeComponent({ component: SwForm }) as angular.IDirectiveFactory )
 .directive('swfForm',SWFForm.Factory())
 .directive('swfFileInput',SWFFileInput.Factory())
 .directive('swFormField',SWFormField.Factory())
@@ -83,6 +94,7 @@ var formmodule = angular.module('hibachi.form',['angularjs-datetime-picker',core
 .directive('swfPropertyDisplay',SWFPropertyDisplay.Factory(SWFPropertyDisplay,"swfpropertydisplay.html"))
 .directive('swPropertyDisplay',SWPropertyDisplay.Factory(SWPropertyDisplay,"propertydisplay.html"))
 .directive('swErrorDisplay',SWErrorDisplay.Factory())
+//.directive('swErrorDisplay', downgradeComponent({ component: SwErrorDisplay }) as angular.IDirectiveFactory) 
 .directive('swAddressForm',SWAddressForm.Factory())
 .directive('swFormSubscriber',SWFormSubscriber.Factory());
 

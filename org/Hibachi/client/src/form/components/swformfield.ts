@@ -143,6 +143,7 @@ class SWFormFieldController {
 	}
 
 	public selectStrategy = ()=>{
+        debugger;
 		//this is specific to the admin because it implies loading of options via api
         if(angular.isDefined(this.object.metaData) && angular.isDefined(this.object.metaData[this.propertyIdentifier]) && angular.isDefined(this.object.metaData[this.propertyIdentifier].fieldtype)){
             this.selectType = 'object';
@@ -155,6 +156,7 @@ class SWFormFieldController {
 	}
 
 	public getOptions = ()=>{
+        debugger;
 		if(angular.isUndefined(this.options)){
 			if(!this.optionsArguments || !this.optionsArguments.hasOwnProperty('propertyIdentifier')){
 				this.optionsArguments={
@@ -166,6 +168,7 @@ class SWFormFieldController {
 				this.optionsArguments
 			);
 			optionsPromise.then((value)=>{
+                debugger;
 				this.options = value.data;
 
 				if(this.selectType === 'object'
@@ -417,6 +420,7 @@ export class SwFormField implements OnInit {
     eventListeners;
     context;
     eventAnnouncers;
+    propertyDisplayID;
     
     bindToControllerProps = [
         'propertyIdentifier', 
@@ -449,7 +453,8 @@ export class SwFormField implements OnInit {
         'editable',
         'eventListeners',
         'context',
-        'eventAnnouncers'];
+        'eventAnnouncers',
+        'propertyDisplayID'];
     
     constructor(
         private observerService: ObserverService,
@@ -460,9 +465,11 @@ export class SwFormField implements OnInit {
     }
     
     ngOnInit() {
+        console.log(this.fieldtypes);
         debugger;
         console.log(this.propertydisplay['fieldType']);
-        //debugger;
+        console.log(this.propertydisplay['isDirty']);
+        debugger;
         for (let i in this.bindToControllerProps){
             let prop = this.bindToControllerProps[i];
             if(!this[prop]){
@@ -535,6 +542,7 @@ export class SwFormField implements OnInit {
     };
     
     selectStrategy = ()=>{
+        debugger;
         //this is specific to the admin because it implies loading of options via api
         if(angular.isDefined(this.object.metaData) && angular.isDefined(this.object.metaData[this.propertyIdentifier]) && angular.isDefined(this.object.metaData[this.propertyIdentifier].fieldType)){
             this.selectType = 'object';
@@ -545,6 +553,7 @@ export class SwFormField implements OnInit {
     };
     
     getOptions = ()=>{
+        debugger;
         if(angular.isUndefined(this.options)){
             if(!this.optionsArguments || !this.optionsArguments.hasOwnProperty('propertyIdentifier')){
                 this.optionsArguments={
@@ -556,6 +565,7 @@ export class SwFormField implements OnInit {
                 this.optionsArguments
             );
             optionsPromise.then((value)=>{
+                debugger;
                 this.options = value.data;
 
                 if(this.selectType === 'object'
@@ -648,7 +658,10 @@ export class SwFormField implements OnInit {
         }
 
         //this.$timeout(()=>{
+            debugger;
+        if(this.isDirty !== undefined ) {
             this.form[this.propertyIdentifier].$dirty = this.isDirty;
+        }
             debugger;
         //});
     };

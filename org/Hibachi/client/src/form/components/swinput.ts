@@ -78,6 +78,7 @@ class SWInputController{
 	}
 
 	public onSuccess = ()=>{
+        debugger;
 		this.utilityService.setPropertyValue(this.swForm.object,this.propertyIdentifier,this.value);
 		if(this.swPropertyDisplay){
 			this.utilityService.setPropertyValue(this.swPropertyDisplay.object,this.propertyIdentifier,this.value);
@@ -90,6 +91,7 @@ class SWInputController{
 	}
 
 	public getValidationDirectives = ()=>{
+        debugger;
 		var spaceDelimitedList = '';
 		var name = this.propertyIdentifier;
 		var form = this.form;
@@ -166,7 +168,9 @@ class SWInputController{
 			}
 		});
 
-		return spaceDelimitedList;
+        console.log(spaceDelimitedList);
+        debugger;
+        return spaceDelimitedList;
 	};
 
 	public clear = () =>{
@@ -208,6 +212,7 @@ class SWInputController{
 	}
 
 	public getTemplate = ()=>{
+        debugger;
 		var template = '';
 		var validations = '';
 		var currencyTitle = '';
@@ -298,21 +303,28 @@ class SWInputController{
 			</button>
 		`;
 
+        console.log(template + actionButtons);
+        debugger;
 		return template + actionButtons;
 	};
 
     public pullBindings = ()=>{
+        debugger;
 		var bindToControllerProps = this.$injector.get('swInputDirective')[0].bindToController;
 		for(var i in bindToControllerProps){
 			if(!this[i]){
 				if(!this[i] && this.swFormField && this.swFormField[i]){
 					this[i] = this.swFormField[i];
+                    //debugger;
 				}else if(!this[i] && this.swPropertyDisplay && this.swPropertyDisplay[i]){
 					this[i] = this.swPropertyDisplay[i];
+                    //debugger;
 				}else if(!this[i] && this.swfPropertyDisplay && this.swfPropertyDisplay[i]){
 					this[i] = this.swfPropertyDisplay[i];
+                    //debugger;
 				}else if(!this[i] && this.swForm && this.swForm[i]){
 					this[i] = this.swForm[i];
+                    //debugger;
 				}
 			}
 		}
@@ -337,6 +349,7 @@ class SWInputController{
 
 		this.eventAnnouncersArray = <Array<EventAnnouncer>>this.eventAnnouncers.split(',');
 
+        debugger;
 		this.eventAnnouncerTemplate = "";
 		for(var i in this.eventAnnouncersArray){
 			var eventName = this.eventAnnouncersArray[i];
@@ -445,6 +458,7 @@ class SWInput{
 	}
 
 	public link:ng.IDirectiveLinkFn = (scope:any,element:any,attr)=>{
+        debugger;
 
 		if(scope.swInput.type === 'file'){
 
@@ -512,4 +526,327 @@ class SWInput{
 }
 export{
 	SWInput
+}
+
+
+import { Component, OnInit, OnDestroy, Inject, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
+import { UtilityService } from '../../core/services/utilityservice';
+import { $Hibachi } from '../../core/services/hibachiservice';
+import { RbKeyService } from '../../core/services/rbkeyservice';
+import { ListingService } from '../../listing/services/listingservice';
+import { FormControl, Validators } from '@angular/forms';
+//import { ObserverService } from '../../core/services/observerservice';
+
+@Component({
+    selector   : 'sw-input-upgraded',
+    //template   : `<div class="one"  #one></div>`
+    templateUrl: '/org/Hibachi/client/src/form/components/input.html'    
+})
+export class SwInput implements OnInit, OnDestroy {
+           
+    @Input() propertyIdentifier;
+    @Input() name;
+    @Input() class;
+    errorClass;
+    option;
+    valueObject;
+    @Input() object;
+    @Input() label;
+    @Input() labelText;
+    labelClass;
+    inListingDisplay;
+    listingID;
+    pageRecordIndex;
+    @Input() propertyDisplayID;
+    initialValue;
+    optionValues;
+    @Input() edit;
+    @Input() title;
+    value;
+    errorText;
+    @Input() fieldType;
+    property;
+    binaryFileTarget;
+    rawFileTarget;
+    reverted;
+    revertToValue;
+    showRevert;
+    inputAttributes;
+    type;
+    eventAnnouncers;
+    @Input() context;
+    
+    public form;
+    public edited;
+    public rowSaveEnabled;
+    public eventAnnouncersArray:Array<EventAnnouncer>;
+    public eventAnnouncerTemplate:string;
+    public eventNameForObjectSuccess:string;
+    public eventNameForUpdateBindings;
+    public eventNameForUpdateBindingsID;
+    
+    control: FormControl;
+    
+    constructor(
+        @Inject(DOCUMENT) private document: any,
+        private utilityService: UtilityService,
+        private observerService: ObserverService,
+        private $hibachi: $Hibachi,
+        private rbKeyService: RbKeyService,
+        private listingService: ListingService,
+        private elementRef:ElementRef
+    ) {
+        //this.control = new FormControl('', [Validators.required]);
+    }
+    
+    
+//    ngAfterViewInit() {
+//        var d1 = this.elementRef.nativeElement.querySelector('.one');
+//        d1.insertAdjacentHTML('beforeend', this.getTemplate());
+//    }
+
+    ngOnInit() {
+        if(!this.class){
+            this.class = "form-control";
+        }
+        
+        if(this.inListingDisplay === undefined) {
+            this.inListingDisplay = true;    
+        }
+        
+        this.pullBindings();
+//        this.eventAnnouncersArray = <Array<EventAnnouncer>>this.eventAnnouncers.split(',');
+
+        this.eventAnnouncerTemplate = "";
+//        for(var i in this.eventAnnouncersArray){
+//            var eventName = this.eventAnnouncersArray[i];
+//            if(eventName.length){
+//                this.eventAnnouncerTemplate += ` ng-`+eventName+`="swInput.onEvent($event,'`+eventName+`')"`;
+//            }
+//        }
+
+        if (this.object && this.object.metaData && this.object.metaData.className != undefined){
+            this.eventNameForObjectSuccess = this.object.metaData.className.split('_')[0]+this.context.charAt(0).toUpperCase()+this.context.slice(1)+'Success'
+        }else{
+            this.eventNameForObjectSuccess = this.context.charAt(0).toUpperCase()+this.context.slice(1)+'Success'
+        }
+        var eventNameForObjectSuccessID = this.eventNameForObjectSuccess+this.propertyIdentifier;
+
+        this.eventNameForUpdateBindings = 'updateBindings';
+        if (this.object && this.object.metaData && this.object.metaData.className != undefined){
+            this.eventNameForUpdateBindingsID = this.object.metaData.className.split('_')[0]+this.propertyIdentifier+'updateBindings';
+        }else{
+            this.eventNameForUpdateBindingsID = this.propertyIdentifier+'updateBindings';
+        }
+        var eventNameForPullBindings = 'pullBindings';
+        if (this.object && this.object.metaData && this.object.metaData.className != undefined){
+            var eventNameForPullBindingsID = this.object.metaData.className.split('_')[0]+this.propertyIdentifier+'pullBindings';
+        }else{
+            var eventNameForPullBindingsID = this.propertyIdentifier+'pullBindings';
+
+        }
+        //attach a successObserver
+        if(this.object){
+            //update bindings on save success
+            this.observerService.attach(this.onSuccess,this.eventNameForObjectSuccess,eventNameForObjectSuccessID);
+
+            //update bindings manually
+            this.observerService.attach(this.onSuccess,this.eventNameForUpdateBindings,this.eventNameForUpdateBindingsID);
+
+            //pull bindings from higher binding level manually
+            this.observerService.attach(this.pullBindings,eventNameForPullBindings,eventNameForPullBindingsID);
+
+        }
+        
+        //renders the template and compiles it
+        //this.document.body.innerHTML.append = this.document.body.innerHTML + this.getTemplate(); 
+        //element.html(scope.swInput.getTemplate());
+        //this.$compile(element.contents())(scope);
+
+    }
+    
+    pullBindings = ()=>{
+        debugger;
+        //var bindToControllerProps = this.$injector.get('swInputDirective')[0].bindToController;
+//        for(var i in bindToControllerProps){
+//            if(!this[i]){
+//                if(!this[i] && this.swFormField && this.swFormField[i]){
+//                    this[i] = this.swFormField[i];
+//                    //debugger;
+//                }else if(!this[i] && this.swPropertyDisplay && this.swPropertyDisplay[i]){
+//                    this[i] = this.swPropertyDisplay[i];
+//                   // debugger;
+//                }else if(!this[i] && this.swfPropertyDisplay && this.swfPropertyDisplay[i]){
+//                    this[i] = this.swfPropertyDisplay[i];
+//                    //debugger;
+//                }else if(!this[i] && this.swForm && this.swForm[i]){
+//                    this[i] = this.swForm[i];
+//                    debugger;
+//                }
+//            }
+//        }
+
+        this.edit = this.edit || true;
+        this.fieldType = this.fieldType || "text";
+
+        this.inputAttributes = this.inputAttributes || "";
+
+        this.inputAttributes = this.utilityService.replaceAll(this.inputAttributes,"'",'"');
+
+        this.value = this.utilityService.getPropertyValue(this.object,this.propertyIdentifier);
+        debugger;
+    };
+
+    onSuccess = ()=>{
+//        this.utilityService.setPropertyValue(this.swForm.object,this.propertyIdentifier,this.value);
+//        if(this.swPropertyDisplay){
+//            this.utilityService.setPropertyValue(this.swPropertyDisplay.object,this.propertyIdentifier,this.value);
+//        }
+//        if(this.swfPropertyDisplay){
+//            this.utilityService.setPropertyValue(this.swfPropertyDisplay.object,this.propertyIdentifier,this.value);
+//            this.swfPropertyDisplay.edit = false;
+//        }
+//        this.utilityService.setPropertyValue(this.swFormField.object,this.propertyIdentifier,this.value);
+    };
+    
+    getTemplate = ()=>{
+        debugger;
+        var template = '';
+        var validations = '';
+        var currencyTitle = '';
+        var currencyFormatter = '';
+        var style = "";
+
+        if(!this.class){
+            this.class = "form-control";
+        }
+
+//        if(!this.noValidate){
+//            validations = this.getValidationDirectives();
+//        }
+
+        if(this.object && this.object.metaData && this.object.metaData.$$getPropertyFormatType(this.propertyIdentifier) != undefined && this.object.metaData.$$getPropertyFormatType(this.propertyIdentifier) == "currency"){
+            currencyFormatter = 'sw-currency-formatter ';
+            if(angular.isDefined(this.object.data.currencyCode)){
+                currencyFormatter = currencyFormatter + 'data-currency-code="' + this.object.data.currencyCode + '" ';
+                currencyTitle = '<span class="s-title">' + this.object.data.currencyCode + '</span>';
+            }
+        }
+
+        var appConfig = this.$hibachi.getConfig();
+
+        var placeholder ='';
+        if(this.object.metaData && this.object.metaData[this.propertyIdentifier] && this.object.metaData[this.propertyIdentifier].hb_nullrbkey){
+            placeholder = this.rbKeyService.getRBKey(this.object.metaData[this.propertyIdentifier].hb_nullrbkey);
+        }
+
+        if(this.fieldType.toLowerCase() === 'json'){
+            style = style += 'display:none';
+        }
+
+        var acceptedFieldTypes = ['email','text','password','number','time','date','datetime','json','file'];
+
+        if(acceptedFieldTypes.indexOf(this.fieldType.toLowerCase()) >= 0){
+            var inputType = this.fieldType.toLowerCase();
+            
+            if(this.fieldType === 'time' || this.fieldType === 'number'){
+                inputType="text";
+            }
+            
+            template = currencyTitle + '<input type="' + inputType + '" class="' + this.class + '" '+
+                '[(ngModel)]="value" '+
+                '[disabled]="editable === false" '+
+                '[hidden]="!edit" '+
+                `[ngClass]="{'form-control':swInput.inListingDisplay, 'input-xs':swInput.inListingDisplay}"` +
+                'name="'+this.propertyIdentifier+'" ' +
+                'placeholder="'+placeholder+'" '+
+                validations + currencyFormatter +
+                'id="swinput'+this.name+'" '+
+                'style="'+style+'"'+
+                this.inputAttributes+
+                this.eventAnnouncerTemplate;
+        }
+
+//        var dateFieldTypes = ['date','datetime','time'];
+//        if(dateFieldTypes.indexOf(this.fieldType.toLowerCase()) >= 0){
+//            template = template + 'datetime-picker ';
+//        }
+//        if(this.fieldType === 'time'){
+//            template = template + 'data-time-only="true" date-format="'+appConfig.timeFormat.replace('tt','a')+'" ng-blur="swInput.pushBindings()"';
+//        }
+//        if(this.fieldType === 'date'){
+//            template = template + 'data-date-only="true" future-only date-format="'+appConfig.dateFormat+'" ';
+//        }
+//        if(template.length){
+//            template = template + ' />';
+//        }
+
+        var actionButtons = `
+            <a class="s-remove-change"
+                (click)="clear()"
+                *ngIf="this.edited && this.edit">
+                    <i class="fa fa-remove"></i>
+            </a>
+
+            <!-- Revert Button -->
+            <button class="btn btn-xs btn-default s-revert-btn"
+                    [hidden]="!showRevert"
+                    (click)="revert()"
+                    [data-toggle]="'popover'"
+                    [data-trigger]="'hover'"
+                    [data-content]="{{revertText}}"
+                    [data-original-title]=""
+                    title="">
+                <i class="fa fa-refresh"></i>
+            </button>
+        `;
+
+        console.log(template + actionButtons);
+        debugger;
+        return template + actionButtons;
+    };
+
+    clear = () =>{
+        if(this.reverted){
+            this.reverted = false;
+            this.showRevert = true;
+        }
+        this.edited = false;
+        this.value= this.initialValue;
+        if(this.inListingDisplay && this.rowSaveEnabled){
+            this.listingService.markUnedited( this.listingID,
+                                              this.pageRecordIndex,
+                                              this.propertyDisplayID
+                                            );
+        }
+    };
+    
+    revert = () =>{
+        this.showRevert = false;
+        this.reverted = true;
+        this.value = this.revertToValue;
+        this.onEvent(<Event>{}, "change");
+    };
+    
+    onEvent = (event:Event,eventName:string):void=>{
+        let customEventName = this.name+eventName;
+        let formEventName = this.name + eventName;
+        let data = {
+            event:event,
+            eventName:eventName,
+            form:this.form,
+            //swForm:this.swForm,
+            swInput:this,
+            inputElement:$('input').first()[0]
+        };
+        this.observerService.notify(customEventName,data);
+        this.observerService.notify(formEventName,data);
+        this.observerService.notify(eventName,data);
+    };
+    
+    ngOnDestroy() {
+        this.observerService.detachById(this.eventNameForUpdateBindings);
+        this.observerService.detachById(this.eventNameForUpdateBindingsID );        
+    }
 }
